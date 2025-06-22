@@ -401,7 +401,7 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
             margin: const EdgeInsets.only(bottom: 16),
             child: ExpansionTile(
               title: Text(
-                DateUtils.getRelativeDate(date),
+                DateTimeUtils.getRelativeDate(date),
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
               subtitle: Text(
@@ -429,7 +429,7 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                     size: 20,
                   ),
                   title: Text(WaterCalculator.formatAmount(intake.amount)),
-                  subtitle: Text(DateUtils.formatTime(intake.timestamp)),
+                  subtitle: Text(DateTimeUtils.formatTime(intake.timestamp)),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete, color: AppColors.error, size: 20),
                     onPressed: () => _showDeleteConfirmation(context, viewModel, intake),
