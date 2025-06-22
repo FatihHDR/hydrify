@@ -311,7 +311,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Expanded(
                 child: ListTile(
                   title: const Text('Start Time'),
-                  subtitle: Text(DateUtils.formatTime(profile.startTime)),
+                  subtitle: Text(DateTimeUtils.formatTime(profile.startTime)),
                   leading: const Icon(Icons.access_time),
                   contentPadding: EdgeInsets.zero,
                   onTap: () => _selectTime(context, viewModel, true),
@@ -321,7 +321,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               Expanded(
                 child: ListTile(
                   title: const Text('End Time'),
-                  subtitle: Text(DateUtils.formatTime(profile.endTime)),
+                  subtitle: Text(DateTimeUtils.formatTime(profile.endTime)),
                   leading: const Icon(Icons.access_time),
                   contentPadding: EdgeInsets.zero,
                   onTap: () => _selectTime(context, viewModel, false),
