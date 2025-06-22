@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'services/notification_service.dart';
-import 'services/preferences_service.dart';
 import 'viewmodels/home_viewmodel.dart';
 import 'viewmodels/profile_viewmodel.dart';
 import 'viewmodels/history_viewmodel.dart';
