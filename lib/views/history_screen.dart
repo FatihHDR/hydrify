@@ -215,9 +215,8 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                               getTitlesWidget: (value, meta) {
                                 if (value.toInt() < weeklyTotals.length) {
                                   final date = weeklyTotals.keys.elementAt(value.toInt());
-                                  final parsedDate = DateTime.parse(date);
-                                  return Text(
-                                    DateUtils.formatDateShort(parsedDate),
+                                  final parsedDate = DateTime.parse(date);                                  return Text(
+                                    DateTimeUtils.formatDateShort(parsedDate),
                                     style: const TextStyle(fontSize: 10),
                                   );
                                 }
