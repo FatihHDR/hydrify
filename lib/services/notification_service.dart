@@ -1,5 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:timezone/timezone.dart' as tz;
 import '../models/user_profile_model.dart';
 
 class NotificationService {
@@ -126,16 +127,15 @@ class NotificationService {
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,
-    );
-
-    await _flutterLocalNotificationsPlugin.schedule(
+    );    await _flutterLocalNotificationsPlugin.zonedSchedule(
       id,
       title,
       body,
-      scheduledTime,
+      tz.TZDateTime.from(scheduledTime, tz.local),
       platformChannelSpecifics,
       payload: 'water_reminder',
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
     );
   }
 
