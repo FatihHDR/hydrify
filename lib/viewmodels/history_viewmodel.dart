@@ -103,9 +103,8 @@ class HistoryViewModel extends ChangeNotifier {
         'intakes': entry.value,
         'totalAmount': totalAmount,
         'totalIntakes': entry.value.length,
-      };
-    }).toList()
-      ..sort((a, b) => b['date'].compareTo(a['date'])); // Sort by date descending
+      };    }).toList()
+      ..sort((a, b) => (b['date'] as String).compareTo(a['date'] as String)); // Sort by date descending
   }
 
   double getAverageIntake(int days) {
