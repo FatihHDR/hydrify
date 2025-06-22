@@ -199,9 +199,8 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                             tooltipBgColor: AppColors.waterBlue,
                             getTooltipItem: (group, groupIndex, rod, rodIndex) {
                               final date = weeklyTotals.keys.elementAt(groupIndex);
-                              final amount = rod.toY.round();
-                              return BarTooltipItem(
-                                '${DateUtils.formatDateShort(DateTime.parse(date))}\n${WaterCalculator.formatAmount(amount)}',
+                              final amount = rod.toY.round();                              return BarTooltipItem(
+                                '${DateTimeUtils.formatDateShort(DateTime.parse(date))}\n${WaterCalculator.formatAmount(amount)}',
                                 const TextStyle(color: Colors.white),
                               );
                             },
