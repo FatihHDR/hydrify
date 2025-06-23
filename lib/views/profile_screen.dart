@@ -5,9 +5,9 @@ import '../viewmodels/auth_viewmodel.dart';
 import '../models/user_profile_model.dart';
 import '../utils/app_theme.dart';
 import '../utils/helpers.dart';
-import '../utils/theme_manager.dart';
 import '../widgets/common_widgets.dart';
 import '../widgets/gradient_background.dart';
+import '../widgets/theme_widgets.dart';
 import 'login_screen.dart';
 import 'debug_screen.dart';
 
@@ -62,21 +62,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           title: const Text('Profile'),
           backgroundColor: Colors.transparent,
           foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
-          elevation: 0,actions: [
-          // Dark mode toggle button
-          Consumer<ThemeManager>(
-            builder: (context, themeManager, child) {
-              return IconButton(
-                icon: Icon(
-                  themeManager.isDarkMode ? Icons.light_mode : Icons.dark_mode,
-                ),
-                onPressed: () {
-                  themeManager.toggleTheme();
-                },
-                tooltip: themeManager.isDarkMode ? 'Light Mode' : 'Dark Mode',
-              );
-            },
-          ),
+          elevation: 0,        actions: [
+          // Animated theme toggle button
+          const ThemeToggleButton(),
           // Debug button
           IconButton(
             icon: const Icon(Icons.bug_report),

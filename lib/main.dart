@@ -41,16 +41,20 @@ class HydrifyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => HistoryViewModel()),
         ChangeNotifierProvider(create: (_) => AchievementViewModel()),
         ChangeNotifierProvider(create: (_) => AnalyticsViewModel()),
-      ],
-      child: Consumer<ThemeManager>(
+      ],      child: Consumer<ThemeManager>(
         builder: (context, themeManager, child) {
-          return MaterialApp(
-            title: 'Hydrify',
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
-            themeMode: themeManager.themeMode,
-            home: const SplashScreen(),
-            debugShowCheckedModeBanner: false,
+          return AnimatedTheme(
+            data: themeManager.isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            child: MaterialApp(
+              title: 'Hydrify',
+              theme: AppTheme.lightTheme,
+              darkTheme: AppTheme.darkTheme,
+              themeMode: themeManager.themeMode,
+              home: const SplashScreen(),
+              debugShowCheckedModeBanner: false,
+            ),
           );
         },
       ),

@@ -4,6 +4,8 @@ import '../viewmodels/achievement_viewmodel.dart';
 import '../viewmodels/home_viewmodel.dart';
 import '../services/database_service.dart';
 import '../utils/app_theme.dart';
+import '../utils/theme_manager.dart';
+import '../widgets/theme_widgets.dart';
 import 'analytics_screen.dart';
 
 class DebugScreen extends StatelessWidget {
@@ -187,6 +189,92 @@ class DebugScreen extends StatelessWidget {
                 },
               ),
             ),
+            
+            const SizedBox(height: 16),
+            
+            // Theme Testing Section
+            const Text(
+              'Theme Testing',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 12),
+            
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Theme Controls'),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () async {
+                              final themeManager = Provider.of<ThemeManager>(context, listen: false);
+                              await themeManager.setTheme(ThemeMode.light);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Switched to Light Mode')),
+                              );
+                            },
+                            icon: const Icon(Icons.light_mode),
+                            label: const Text('Light'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orange[300],
+                              foregroundColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () async {
+                              final themeManager = Provider.of<ThemeManager>(context, listen: false);
+                              await themeManager.setTheme(ThemeMode.dark);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Switched to Dark Mode')),
+                              );
+                            },
+                            icon: const Icon(Icons.dark_mode),
+                            label: const Text('Dark'),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.grey[800],
+                              foregroundColor: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text('Animated Toggle: '),
+                        const AnimatedThemeToggle(size: 20),
+                        const SizedBox(width: 16),
+                        const Text('Switch: '),
+                        Consumer<ThemeManager>(
+                          builder: (context, themeManager, child) {
+                            return Switch.adaptive(
+                              value: themeManager.isDarkMode,
+                              onChanged: (_) => themeManager.toggleTheme(),
+                              activeColor: AppColors.primary,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            
+            const SizedBox(height: 16),
           ],
         ),
       ),
