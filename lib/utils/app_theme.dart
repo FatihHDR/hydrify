@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppColors {  // Modern minimalist color palette
@@ -126,17 +127,11 @@ class AppTheme {
           fontWeight: FontWeight.w500,
           color: AppColors.textSecondary,
         ),
-      ),
-      colorScheme: ColorScheme.fromSeed(
+      ),      colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         brightness: Brightness.light,
       ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.waterBlue,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-      ),      elevatedButtonTheme: ElevatedButtonThemeData(
+      elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.waterBlue,
           foregroundColor: Colors.white,
@@ -174,21 +169,58 @@ class AppTheme {
           side: BorderSide(color: AppColors.textLight, width: 0.5), // Subtle border
         ),
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      ),
-      inputDecorationTheme: InputDecorationTheme(
+      ),      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.surfaceVariant,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.textLight),
+          borderRadius: BorderRadius.circular(16), // More rounded
+          borderSide: BorderSide.none, // Borderless for clean look
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.waterBlue),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: AppColors.waterBlue, width: 2),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      ),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: AppColors.error, width: 1),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        labelStyle: GoogleFonts.montserrat(
+          color: AppColors.textSecondary,
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+        hintStyle: GoogleFonts.montserrat(
+          color: AppColors.textLight,
+          fontSize: 16,
+        ),
+      ),      floatingActionButtonTheme: const FloatingActionButtonThemeData(
         backgroundColor: AppColors.waterBlue,
         foregroundColor: Colors.white,
+        elevation: 0, // Flat design
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16)), // More rounded
+        ),
+      ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: false, // Left aligned for modern look
+        titleTextStyle: GoogleFonts.montserrat(
+          color: AppColors.textPrimary,
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+        ),
+        iconTheme: const IconThemeData(
+          color: AppColors.textPrimary,
+          size: 24,
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
     );
   }
