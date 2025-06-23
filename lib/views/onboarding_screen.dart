@@ -4,7 +4,6 @@ import '../models/user_profile_model.dart';
 import '../viewmodels/profile_viewmodel.dart';
 import '../services/preferences_service.dart';
 import '../utils/app_theme.dart';
-import '../utils/helpers.dart';
 import 'main_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -197,20 +196,26 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 color: AppColors.textSecondary,
               ),
             ),
-            const SizedBox(height: 32),
-            TextFormField(
+            const SizedBox(height: 32),            TextFormField(
               controller: _nameController,
               decoration: const InputDecoration(
                 labelText: 'Name',
                 hintText: 'Enter your name',
                 prefixIcon: Icon(Icons.person),
               ),
-              validator: ValidationUtils.validateName,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Name is required';
+                }
+                if (value.trim().length < 2) {
+                  return 'Name must be at least 2 characters';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 20),
             Row(
-              children: [
-                Expanded(
+              children: [                Expanded(
                   child: TextFormField(
                     controller: _ageController,
                     decoration: const InputDecoration(
@@ -219,7 +224,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       prefixIcon: Icon(Icons.cake),
                     ),
                     keyboardType: TextInputType.number,
-                    validator: ValidationUtils.validateAge,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Age is required';
+                      }
+                      final age = int.tryParse(value.trim());
+                      if (age == null || age < 1 || age > 120) {
+                        return 'Enter a valid age (1-120)';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -232,7 +246,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       prefixIcon: Icon(Icons.fitness_center),
                     ),
                     keyboardType: TextInputType.number,
-                    validator: ValidationUtils.validateWeight,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Weight is required';
+                      }
+                      final weight = double.tryParse(value.trim());
+                      if (weight == null || weight < 1 || weight > 500) {
+                        return 'Enter a valid weight (1-500 kg)';
+                      }
+                      return null;
+                    },
                   ),
                 ),
               ],
@@ -264,8 +287,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               color: AppColors.textSecondary,
             ),
           ),
-          const SizedBox(height: 32),
-          TextFormField(
+          const SizedBox(height: 32),          TextFormField(
             controller: _goalController,
             decoration: const InputDecoration(
               labelText: 'Daily Water Goal',
@@ -274,7 +296,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               suffixText: 'ml',
             ),
             keyboardType: TextInputType.number,
-            validator: ValidationUtils.validateDailyGoal,
+            validator: (value) {
+              if (value == null || value.trim().isEmpty) {
+                return 'Daily goal is required';
+              }
+              final goal = int.tryParse(value.trim());
+              if (goal == null || goal < 500 || goal > 5000) {
+                return 'Enter a valid goal (500-5000 ml)';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 16),
           Container(
@@ -435,10 +466,50 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
     );
   }
-
   void _nextPage() {
-    if (_currentPage == 1 && !_formKey.currentState!.validate()) {
-      return;
+    if (_currentPage == 1) {
+      // Validate form manually instead of using _formKey.currentState!.validate()
+      if (_nameController.text.trim().isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter your name'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        return;
+      }
+      
+      if (_ageController.text.trim().isEmpty || int.tryParse(_ageController.text) == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter a valid age'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        return;
+      }
+      
+      if (_weightController.text.trim().isEmpty || double.tryParse(_weightController.text) == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter a valid weight'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        return;
+      }
+    }
+    
+    if (_currentPage == 2) {
+      if (_goalController.text.trim().isEmpty || int.tryParse(_goalController.text) == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter a valid daily goal'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        return;
+      }
     }
     
     _pageController.nextPage(
@@ -469,50 +540,124 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         }
       });
     }
-  }
-
-  Future<void> _completeOnboarding() async {
-    if (!_formKey.currentState!.validate()) {
-      _pageController.animateToPage(
-        1,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
-      );
-      return;
-    }
-
-    final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
-    
-    final now = DateTime.now();
-    final startDateTime = DateTime(now.year, now.month, now.day, _startTime.hour, _startTime.minute);
-    final endDateTime = DateTime(now.year, now.month, now.day, _endTime.hour, _endTime.minute);
-    
-    final profile = UserProfileModel(
-      name: _nameController.text.trim(),
-      age: int.parse(_ageController.text),
-      weight: double.parse(_weightController.text),
-      dailyGoal: int.parse(_goalController.text),
-      notificationsEnabled: _notificationsEnabled,
-      notificationInterval: _notificationInterval,
-      startTime: startDateTime,
-      endTime: endDateTime,
+  }  Future<void> _completeOnboarding() async {
+    // Show loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
     );
 
-    final success = await profileViewModel.saveUserProfile(profile);
-    
-    if (success) {
-      await PreferencesService().setFirstRunComplete();
-      
-      if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => const MainScreen()),
-        );
-      }
-    } else {
-      if (mounted) {
+    try {
+      // Validate form data first
+      if (_nameController.text.trim().isEmpty) {
+        Navigator.of(context).pop(); // Close loading dialog
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Error saving profile. Please try again.'),
+            content: Text('Please enter your name'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        _pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+        return;
+      }
+
+      if (_ageController.text.trim().isEmpty || int.tryParse(_ageController.text) == null) {
+        Navigator.of(context).pop(); // Close loading dialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter a valid age'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        _pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+        return;
+      }
+
+      if (_weightController.text.trim().isEmpty || double.tryParse(_weightController.text) == null) {
+        Navigator.of(context).pop(); // Close loading dialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter a valid weight'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        _pageController.animateToPage(1, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+        return;
+      }
+
+      if (_goalController.text.trim().isEmpty || int.tryParse(_goalController.text) == null) {
+        Navigator.of(context).pop(); // Close loading dialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter a valid daily goal'),
+            backgroundColor: AppColors.error,
+          ),
+        );
+        _pageController.animateToPage(2, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+        return;
+      }
+
+      if (_formKey.currentState != null && !_formKey.currentState!.validate()) {
+        Navigator.of(context).pop(); // Close loading dialog
+        _pageController.animateToPage(
+          1,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+        return;
+      }
+
+      final profileViewModel = Provider.of<ProfileViewModel>(context, listen: false);
+      
+      final now = DateTime.now();
+      final startDateTime = DateTime(now.year, now.month, now.day, _startTime.hour, _startTime.minute);
+      final endDateTime = DateTime(now.year, now.month, now.day, _endTime.hour, _endTime.minute);
+      
+      final profile = UserProfileModel(
+        name: _nameController.text.trim(),
+        age: int.parse(_ageController.text.trim()),
+        weight: double.parse(_weightController.text.trim()),
+        dailyGoal: int.parse(_goalController.text.trim()),
+        notificationsEnabled: _notificationsEnabled,
+        notificationInterval: _notificationInterval,
+        startTime: startDateTime,
+        endTime: endDateTime,
+      );
+
+      print('Saving profile: ${profile.name}, ${profile.age}, ${profile.weight}'); // Debug
+
+      final success = await profileViewModel.saveUserProfile(profile);
+      
+      if (success) {
+        await PreferencesService().setFirstRunComplete();
+        
+        if (mounted) {
+          Navigator.of(context).pop(); // Close loading dialog
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => const MainScreen()),
+          );
+        }
+      } else {
+        if (mounted) {
+          Navigator.of(context).pop(); // Close loading dialog
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Error saving profile. Please try again.'),
+              backgroundColor: AppColors.error,
+            ),
+          );
+        }
+      }
+    } catch (e) {
+      print('Error in _completeOnboarding: $e'); // Debug
+      if (mounted) {
+        Navigator.of(context).pop(); // Close loading dialog
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
             backgroundColor: AppColors.error,
           ),
         );

@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AppColors {
-  static const Color primary = Color(0xFF4A90E2);
-  static const Color primaryDark = Color(0xFF357ABD);
-  static const Color secondary = Color(0xFF50C878);
-  static const Color accent = Color(0xFFFFB74D);
+class AppColors {  // Modern minimalist color palette
+  static const Color primary = Color(0xFF2563EB); // Modern blue
+  static const Color primaryDark = Color(0xFF1D4ED8);
+  static const Color secondary = Color(0xFF10B981); // Modern green
+  static const Color accent = Color(0xFF8B5CF6); // Modern purple
   
-  // Water theme colors
-  static const Color waterBlue = Color(0xFF4FC3F7);
-  static const Color waterBlueDark = Color(0xFF29B6F6);
-  static const Color waterBlueLight = Color(0xFF81D4FA);
+  // Clean water theme colors
+  static const Color waterBlue = Color(0xFF3B82F6); // Clean blue
+  static const Color waterBlueDark = Color(0xFF2563EB);
+  static const Color waterBlueLight = Color(0xFFDBEAFE);
   
   // Background colors
   static const Color background = Color(0xFFF8F9FA);
   static const Color surface = Color(0xFFFFFFFF);
-  static const Color surfaceVariant = Color(0xFFF5F5F5);
-    // Text colors
-  static const Color textPrimary = Color(0xFF1A1A1A); // Darker text
-  static const Color textSecondary = Color(0xFF424242); // Darker secondary text
-  static const Color textLight = Color(0xFF757575);
+  static const Color surfaceVariant = Color(0xFFF5F5F5);  // Text colors
+  static const Color textPrimary = Color(0xFF000000); // Black - sangat gelap
+  static const Color textSecondary = Color(0xFF1A1A1A); // Almost black - sangat gelap
+  static const Color textLight = Color(0xFF424242); // Dark gray - gelap
   
   // Status colors
   static const Color success = Color(0xFF4CAF50);

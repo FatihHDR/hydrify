@@ -111,21 +111,19 @@ class _SplashScreenState extends State<SplashScreen>
                           color: Colors.white,
                         ),
                       ),
-                      const SizedBox(height: 32),
-                      const Text(
+                      const SizedBox(height: 32),                      Text(
                         'Hydrify',
-                        style: TextStyle(
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
+                        style: Theme.of(context).textTheme.displayLarge?.copyWith(
                           color: Colors.white,
+                          fontSize: 36,
                         ),
                       ),
                       const SizedBox(height: 8),
                       Text(
                         'Stay Hydrated, Stay Healthy',
-                        style: TextStyle(
-                          fontSize: 16,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           color: Colors.white.withOpacity(0.9),
+                          fontSize: 16,
                         ),
                       ),
                       const SizedBox(height: 48),
