@@ -148,12 +148,11 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                 color: color,
               ),
             ),
-            const SizedBox(height: 4),
-            Text(
+            const SizedBox(height: 4),            Text(
               title,
               style: TextStyle(
                 fontSize: 12,
-                color: AppColors.textSecondary,
+                color: AppColors.getTextSecondary(context),
               ),
               textAlign: TextAlign.center,
             ),
@@ -182,11 +181,10 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
             const SizedBox(height: 16),
             SizedBox(
               height: 200,
-              child: weeklyTotals.isEmpty
-                  ? const Center(
+              child: weeklyTotals.isEmpty                  ? Center(
                       child: Text(
                         'No data available',
-                        style: TextStyle(color: AppColors.textLight),
+                        style: TextStyle(color: AppColors.getTextLight(context)),
                       ),
                     )
                   : BarChart(
@@ -298,12 +296,12 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [        const Text(
+      children: [        Text(
           'Insights',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            color: AppColors.getTextPrimary(context),
           ),
         ),
         const SizedBox(height: 12),
@@ -312,13 +310,12 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
-                children: [
-                  Icon(Icons.lightbulb, color: AppColors.textLight),
+                children: [                  Icon(Icons.lightbulb, color: AppColors.getTextLight(context)),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       'Keep tracking your water intake to get personalized insights!',
-                      style: TextStyle(color: AppColors.textSecondary),
+                      style: TextStyle(color: AppColors.getTextSecondary(context)),
                     ),
                   ),
                 ],
@@ -358,11 +355,10 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                       fontSize: 16,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
+                  const SizedBox(height: 4),                  Text(
                     description,
                     style: TextStyle(
-                      color: AppColors.textSecondary,
+                      color: AppColors.getTextSecondary(context),
                       fontSize: 14,
                     ),
                   ),
@@ -403,10 +399,9 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
               title: Text(
                 DateTimeUtils.getRelativeDate(date),
                 style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: Text(
+              ),              subtitle: Text(
                 '${WaterCalculator.formatAmount(totalAmount)} • ${intakes.length} entries',
-                style: TextStyle(color: AppColors.textSecondary),
+                style: TextStyle(color: AppColors.getTextSecondary(context)),
               ),
               leading: Container(
                 width: 40,

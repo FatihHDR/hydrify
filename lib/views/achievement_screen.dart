@@ -179,11 +179,9 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
   }
 
   Widget _buildLockedAchievements(AchievementViewModel viewModel) {
-    if (viewModel.lockedAchievements.isEmpty) {
-      return const Center(
+    if (viewModel.lockedAchievements.isEmpty) {      return Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          mainAxisAlignment: MainAxisAlignment.center,          children: [
             Icon(
               Icons.lock_open,
               size: 80,
@@ -198,12 +196,11 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
                 color: AppColors.success,
               ),
             ),
-            SizedBox(height: 8),
-            Text(
+            SizedBox(height: 8),Text(
               'Congratulations on your hydration mastery!',
               style: TextStyle(
                 fontSize: 16,
-                color: AppColors.textSecondary,
+                color: AppColors.getTextSecondary(context),
               ),
               textAlign: TextAlign.center,
             ),
@@ -228,15 +225,14 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
+      children: [        Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: AppColors.getTextPrimary(context),
             ),
           ),
         ),
@@ -272,18 +268,16 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
               Container(
                 width: 56,
                 height: 56,
-                decoration: BoxDecoration(
-                  color: achievement.isUnlocked
+                decoration: BoxDecoration(                  color: achievement.isUnlocked
                       ? achievement.color.withOpacity(0.2)
-                      : AppColors.textLight.withOpacity(0.2),
+                      : AppColors.getTextLight(context).withOpacity(0.2),
                   borderRadius: BorderRadius.circular(28),
                 ),
                 child: Icon(
                   achievement.icon,
-                  size: 28,
-                  color: achievement.isUnlocked
+                  size: 28,                  color: achievement.isUnlocked
                       ? achievement.color
-                      : AppColors.textLight,
+                      : AppColors.getTextLight(context),
                 ),
               ),
               const SizedBox(width: 16),
@@ -298,10 +292,9 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
                             achievement.title,
                             style: TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: achievement.isUnlocked
-                                  ? AppColors.textPrimary
-                                  : AppColors.textLight,
+                              fontWeight: FontWeight.bold,                              color: achievement.isUnlocked
+                                  ? AppColors.getTextPrimary(context)
+                                  : AppColors.getTextLight(context),
                             ),
                           ),
                         ),
@@ -330,10 +323,9 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
                     Text(
                       achievement.description,
                       style: TextStyle(
-                        fontSize: 14,
-                        color: achievement.isUnlocked
-                            ? AppColors.textSecondary
-                            : AppColors.textLight,
+                        fontSize: 14,                        color: achievement.isUnlocked
+                            ? AppColors.getTextSecondary(context)
+                            : AppColors.getTextLight(context),
                       ),
                     ),
                     if (achievement.isUnlocked && achievement.unlockedDate != null)

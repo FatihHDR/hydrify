@@ -134,11 +134,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       letterSpacing: -0.5,
                     ),
                   ),                  const SizedBox(height: 8),
-                  const Text(
+                  Text(
                     'Let\'s stay hydrated today!',
                     style: TextStyle(
                       fontSize: 16,
-                      color: AppColors.textSecondary,
+                      color: AppColors.getTextSecondary(context),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -272,12 +272,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildQuickAddSection(HomeViewModel viewModel) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [        const LocalizedText(
+      children: [        LocalizedText(
           'quick_add',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            color: AppColors.getTextPrimary(context),
           ),
         ),
         const SizedBox(height: 12),        SizedBox(
@@ -336,20 +336,19 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
+          children: [            Text(
               'Today\'s Intake',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: AppColors.getTextPrimary(context),
               ),
             ),
             Text(
               '${viewModel.todayIntakes.length} entries',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
-                color: AppColors.textSecondary,
+                color: AppColors.getTextSecondary(context),
               ),
             ),
           ],

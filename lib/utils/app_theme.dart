@@ -82,6 +82,31 @@ class AppColors {
       Color(0xFF0C4A6E), // Dark blue
     ],
   );
+
+  // Helper methods for theme-aware colors
+  static Color getTextPrimary(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark 
+        ? textPrimaryDark 
+        : textPrimary;
+  }
+
+  static Color getTextSecondary(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark 
+        ? textSecondaryDark 
+        : textSecondary;
+  }
+
+  static Color getTextLight(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark 
+        ? textLightDark 
+        : textLight;
+  }
+
+  static Color getSurfaceColor(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark 
+        ? surfaceDark 
+        : surface;
+  }
 }
 
 class AppTheme {
