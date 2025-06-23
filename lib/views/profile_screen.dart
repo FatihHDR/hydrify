@@ -7,6 +7,7 @@ import '../utils/app_theme.dart';
 import '../utils/helpers.dart';
 import '../utils/theme_manager.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/gradient_background.dart';
 import 'login_screen.dart';
 import 'debug_screen.dart';
 
@@ -52,15 +53,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _goalController.dispose();
     super.dispose();
   }
-
   @override
-  Widget build(BuildContext context) {    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Profile'),
+  Widget build(BuildContext context) {
+    return GradientBackground(
+      child: Scaffold(
         backgroundColor: Colors.transparent,
-        foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
-        elevation: 0,        actions: [
+        appBar: AppBar(
+          title: const Text('Profile'),
+          backgroundColor: Colors.transparent,
+          foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
+          elevation: 0,actions: [
           // Dark mode toggle button
           Consumer<ThemeManager>(
             builder: (context, themeManager, child) {
@@ -129,9 +131,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-          );
-        },
+          );        },
       ),
+    ),
     );
   }
 

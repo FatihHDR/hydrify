@@ -4,6 +4,7 @@ import '../viewmodels/achievement_viewmodel.dart';
 import '../models/achievement_model.dart';
 import '../utils/app_theme.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/gradient_background.dart';
 
 class AchievementScreen extends StatefulWidget {
   const AchievementScreen({super.key});
@@ -29,15 +30,16 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
     _tabController.dispose();
     super.dispose();
   }
-
   @override
-  Widget build(BuildContext context) {    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('Achievements'),
+  Widget build(BuildContext context) {
+    return GradientBackground(
+      child: Scaffold(
         backgroundColor: Colors.transparent,
-        foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
-        elevation: 0,
+        appBar: AppBar(
+          title: const Text('Achievements'),
+          backgroundColor: Colors.transparent,
+          foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
+          elevation: 0,
         actions: [
           // Debug button to refresh achievements
           IconButton(
@@ -78,9 +80,9 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
                 ),
               ),
             ],
-          );
-        },
+          );        },
       ),
+    ),
     );
   }
 

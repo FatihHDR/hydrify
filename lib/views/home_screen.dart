@@ -4,6 +4,7 @@ import '../viewmodels/home_viewmodel.dart';
 import '../viewmodels/achievement_viewmodel.dart';
 import '../widgets/common_widgets.dart';
 import '../widgets/advanced_widgets.dart';
+import '../widgets/gradient_background.dart';
 import '../utils/app_theme.dart';
 import '../utils/helpers.dart';
 
@@ -14,7 +15,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {  @override
+class _HomeScreenState extends State<HomeScreen> {
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -24,8 +26,11 @@ class _HomeScreenState extends State<HomeScreen> {  @override
   }
 
   @override
-  Widget build(BuildContext context) {    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,appBar: AppBar(
+  Widget build(BuildContext context) {
+    return GradientBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
         title: const Text('Hydrify'),
         backgroundColor: Colors.transparent,
         foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
@@ -82,10 +87,10 @@ class _HomeScreenState extends State<HomeScreen> {  @override
               backgroundColor: AppColors.waterBlue,
               child: const Icon(Icons.add, color: Colors.white),
             ),
-          );
-        },
+          );        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    ),
     );
   }
 
@@ -325,21 +330,22 @@ class _HomeScreenState extends State<HomeScreen> {  @override
       ),
     );
   }
-
   Widget _buildTodayIntakes(HomeViewModel viewModel) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [            const Text(
+          children: [
+            const Text(
               'Today\'s Intake',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: AppColors.textPrimary,
               ),
-            ),Text(
+            ),
+            Text(
               '${viewModel.todayIntakes.length} entries',
               style: const TextStyle(
                 fontSize: 14,
@@ -356,15 +362,17 @@ class _HomeScreenState extends State<HomeScreen> {  @override
             icon: Icons.local_drink,
           )
         else
-          Column(
-            children: viewModel.todayIntakes.map((intake) {
-              return WaterIntakeListItem(
-                time: intake.timestamp,
-                amount: intake.amount,
-                onDelete: () => _showDeleteConfirmation(context, viewModel, intake),
-                onEdit: () => _showEditWaterDialog(context, viewModel, intake),
-              );
-            }).toList(),
+          Builder(
+            builder: (context) => Column(
+              children: viewModel.todayIntakes.map((intake) {
+                return WaterIntakeListItem(
+                  time: intake.timestamp,
+                  amount: intake.amount,
+                  onDelete: () => _showDeleteConfirmation(context, viewModel, intake),
+                  onEdit: () => _showEditWaterDialog(context, viewModel, intake),
+                );
+              }).toList(),
+            ),
           ),
       ],
     );
@@ -557,7 +565,6 @@ class _HomeScreenState extends State<HomeScreen> {  @override
       },
     );
   }
-
   Future<void> _showDeleteConfirmation(BuildContext context, HomeViewModel viewModel, intake) async {
     return showDialog<void>(
       context: context,

@@ -56,11 +56,31 @@ class AppColors {
     end: Alignment.bottomCenter,
     colors: [Color(0xFFFAFAFA), Color(0xFFFFFFFF)],
   );
-  
-  static const LinearGradient cardGradient = LinearGradient(
+    static const LinearGradient cardGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [Color(0xFFFFFFFF), Color(0xFFF8FAFC)],
+  );
+
+  // Background gradients
+  static const LinearGradient backgroundGradientLight = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color(0xFFFFFFFF), // Pure white at top
+      Color(0xFFF0F9FF), // Very light blue
+      Color(0xFFE0F2FE), // Light sky blue
+    ],
+  );
+
+  static const LinearGradient backgroundGradientDark = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [
+      Color(0xFF0F172A), // Dark slate at top
+      Color(0xFF1E293B), // Slate 800
+      Color(0xFF0C4A6E), // Dark blue
+    ],
   );
 }
 

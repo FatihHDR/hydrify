@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import '../viewmodels/history_viewmodel.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/gradient_background.dart';
 import '../utils/app_theme.dart';
 import '../utils/helpers.dart';
 
@@ -30,32 +31,33 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
     _tabController.dispose();
     super.dispose();
   }
-
   @override
-  Widget build(BuildContext context) {    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      appBar: AppBar(
-        title: const Text('History & Stats'),
+  Widget build(BuildContext context) {
+    return GradientBackground(
+      child: Scaffold(
         backgroundColor: Colors.transparent,
-        foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
-        elevation: 0,        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Theme.of(context).primaryColor,
-          labelColor: Theme.of(context).textTheme.bodyLarge?.color,
-          unselectedLabelColor: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
-          tabs: const [
-            Tab(text: 'Chart', icon: Icon(Icons.bar_chart)),
-            Tab(text: 'History', icon: Icon(Icons.list)),
-          ],
-        ),
+        appBar: AppBar(
+          title: const Text('History & Stats'),
+          backgroundColor: Colors.transparent,
+          foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
+          elevation: 0,
+          bottom: TabBar(
+            controller: _tabController,
+            indicatorColor: Theme.of(context).primaryColor,
+            labelColor: Theme.of(context).textTheme.bodyLarge?.color,
+            unselectedLabelColor: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+            tabs: const [
+              Tab(text: 'Chart', icon: Icon(Icons.bar_chart)),
+              Tab(text: 'History', icon: Icon(Icons.list)),
+            ],
+          ),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
               Provider.of<HistoryViewModel>(context, listen: false).refreshHistory();
             },
-          ),
-        ],
+          ),        ],
       ),
       body: Consumer<HistoryViewModel>(
         builder: (context, viewModel, child) {
@@ -72,6 +74,7 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
           );
         },
       ),
+    ),
     );
   }
 
