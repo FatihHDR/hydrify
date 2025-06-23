@@ -3,8 +3,8 @@ plugins {
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
-    id("com.google.gms.google-services") version "4.4.2" apply false
-    id("com.google.gms.google-services")
+    // Firebase plugin will be enabled when Firebase is properly configured
+    // id("com.google.gms.google-services")
 }
 
 android {
@@ -16,9 +16,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
         isCoreLibraryDesugaringEnabled = true
-    }
-
-    kotlinOptions {
+    }    kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
@@ -27,7 +25,7 @@ android {
         applicationId = "com.hydrify.app.hydrify_new"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 21
+        minSdk = 23  // Updated to 23 for Firebase compatibility
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -44,8 +42,9 @@ android {
 
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
-    implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
-    implementation("com.google.firebase:firebase-analytics")
+    // Firebase dependencies will be enabled when Firebase is properly configured
+    // implementation(platform("com.google.firebase:firebase-bom:33.15.0"))
+    // implementation("com.google.firebase:firebase-analytics")
 }
 
 flutter {
