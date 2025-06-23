@@ -906,9 +906,11 @@ class FloatingBottomNavBar extends StatelessWidget {
     required this.currentIndex,
     required this.onTap,
     required this.items,
-  });
-  @override
+  });  @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    
     return Container(
       margin: const EdgeInsets.all(12),
       child: ClipRRect(
@@ -916,11 +918,17 @@ class FloatingBottomNavBar extends StatelessWidget {
         child: Container(
           height: 56,
           decoration: BoxDecoration(
-            color: AppColors.surface,
+            color: isDark ? AppColors.surfaceDark : AppColors.surface,
             borderRadius: BorderRadius.circular(25),
+            border: Border.all(
+              color: isDark 
+                  ? AppColors.surfaceVariantDark.withOpacity(0.3)
+                  : AppColors.textLight.withOpacity(0.1),
+              width: 1,
+            ),
             boxShadow: [
               BoxShadow(
-                color: AppColors.textLight.withOpacity(0.15),
+                color: Colors.black.withOpacity(isDark ? 0.3 : 0.1),
                 blurRadius: 15,
                 offset: const Offset(0, 8),
               ),
@@ -939,18 +947,34 @@ class FloatingBottomNavBar extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeInOut,
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         color: isSelected 
-                            ? AppColors.waterBlue
+                            ? AppColors.waterBlue.withOpacity(0.9)
                             : Colors.transparent,
                         borderRadius: BorderRadius.circular(16),
+                        boxShadow: isSelected ? [
+                          BoxShadow(
+                            color: AppColors.waterBlue.withOpacity(0.3),
+                            blurRadius: 8,
+                            offset: const Offset(0, 2),
+                          ),
+                        ] : null,
                       ),
-                      child: Icon(
-                        item.icon,
-                        color: isSelected ? Colors.white : AppColors.textLight,
-                        size: 26,
+                      child: AnimatedScale(
+                        duration: const Duration(milliseconds: 200),
+                        scale: isSelected ? 1.1 : 1.0,
+                        child: Icon(
+                          item.icon,
+                          color: isSelected 
+                              ? Colors.white 
+                              : isDark 
+                                  ? AppColors.textSecondaryDark
+                                  : AppColors.textLight,
+                          size: 26,
+                        ),
                       ),
                     ),
                   ),
