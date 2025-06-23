@@ -7,6 +7,8 @@ class UserProfileModel {
   final int notificationInterval; // in minutes
   final DateTime startTime;
   final DateTime endTime;
+  final String? email; // Firebase email
+  final String? firebaseUid; // Firebase user ID
 
   UserProfileModel({
     required this.name,
@@ -17,8 +19,9 @@ class UserProfileModel {
     this.notificationInterval = 60,
     required this.startTime,
     required this.endTime,
+    this.email,
+    this.firebaseUid,
   });
-
   Map<String, dynamic> toMap() {
     return {
       'name': name,
@@ -29,9 +32,10 @@ class UserProfileModel {
       'notificationInterval': notificationInterval,
       'startTime': startTime.toIso8601String(),
       'endTime': endTime.toIso8601String(),
+      'email': email,
+      'firebaseUid': firebaseUid,
     };
   }
-
   factory UserProfileModel.fromMap(Map<String, dynamic> map) {
     return UserProfileModel(
       name: map['name'] ?? '',
@@ -42,9 +46,10 @@ class UserProfileModel {
       notificationInterval: map['notificationInterval'] ?? 60,
       startTime: DateTime.parse(map['startTime']),
       endTime: DateTime.parse(map['endTime']),
+      email: map['email'],
+      firebaseUid: map['firebaseUid'],
     );
   }
-
   UserProfileModel copyWith({
     String? name,
     int? age,
@@ -54,6 +59,8 @@ class UserProfileModel {
     int? notificationInterval,
     DateTime? startTime,
     DateTime? endTime,
+    String? email,
+    String? firebaseUid,
   }) {
     return UserProfileModel(
       name: name ?? this.name,
@@ -64,6 +71,8 @@ class UserProfileModel {
       notificationInterval: notificationInterval ?? this.notificationInterval,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
+      email: email ?? this.email,
+      firebaseUid: firebaseUid ?? this.firebaseUid,
     );
   }
 
