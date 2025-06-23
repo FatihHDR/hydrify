@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/preferences_service.dart';
 import '../viewmodels/profile_viewmodel.dart';
+import '../viewmodels/auth_viewmodel.dart';
 import 'onboarding_screen.dart';
 import 'main_screen.dart';
+import 'login_screen.dart';
 import '../utils/app_theme.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,14 +28,19 @@ class _SplashScreenState extends State<SplashScreen>
     _animationController.forward();
     _initializeApp();
   }
-
   Future<void> _initializeApp() async {
     await Future.delayed(const Duration(milliseconds: 1500));
     
-    final preferencesService = PreferencesService();
-    final isFirstRun = await preferencesService.isFirstRun();
+    if (!mounted) return;
     
-    if (mounted) {
+    final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+    final preferencesService = PreferencesService();
+    
+    // Check if user is authenticated
+    if (authViewModel.isAuthenticated) {
+      // User is signed in, check if onboarding is complete
+      final isFirstRun = await preferencesService.isFirstRun();
+      
       if (isFirstRun) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const OnboardingScreen()),
@@ -47,6 +54,11 @@ class _SplashScreenState extends State<SplashScreen>
           MaterialPageRoute(builder: (_) => const MainScreen()),
         );
       }
+    } else {
+      // User is not signed in, show login screen
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      );
     }
   }
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "990240795874",
+    "project_id": "fir-auth-8134b",
+    "storage_bucket": "fir-auth-8134b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990240795874:android:4f774e05ac40a7f00f42bb",
+        "android_client_info": {
+          "package_name": "com.hydrify.app.hydrify_new"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Zxw3PLda8_TMUFI8MVEYAu1qiEfmMCg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

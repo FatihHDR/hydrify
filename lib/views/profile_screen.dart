@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/profile_viewmodel.dart';
+import '../viewmodels/auth_viewmodel.dart';
 import '../models/user_profile_model.dart';
 import '../utils/app_theme.dart';
 import '../utils/helpers.dart';
 import '../widgets/common_widgets.dart';
+import 'login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -89,14 +91,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildProfileHeader(viewModel),
-                  const SizedBox(height: 24),
-                  _buildPersonalInfoSection(viewModel),
+                  const SizedBox(height: 24),                  _buildPersonalInfoSection(viewModel),
                   const SizedBox(height: 24),
                   _buildGoalsSection(viewModel),
                   const SizedBox(height: 24),
                   _buildNotificationSection(viewModel),
                   const SizedBox(height: 24),
                   _buildStatisticsSection(viewModel),
+                  const SizedBox(height: 24),
+                  _buildAccountSection(),
                   const SizedBox(height: 80), // Extra space for bottom padding
                 ],
               ),
@@ -513,9 +516,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       age: int.parse(_ageController.text),
       weight: double.parse(_weightController.text),
       dailyGoal: int.parse(_goalController.text),
-    );
-
-    final success = await viewModel.saveUserProfile(updatedProfile);
+    );    final success = await viewModel.saveUserProfile(updatedProfile);
     
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -524,6 +525,89 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: success ? AppColors.success : AppColors.error,
         ),
       );
+    }
+  }
+
+  Widget _buildAccountSection() {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.account_circle,
+                  color: AppColors.waterBlue,
+                  size: 24,
+                ),
+                const SizedBox(width: 12),
+                Text(
+                  'Account',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            
+            // Sign Out Button
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: _handleSignOut,
+                icon: const Icon(Icons.logout, color: AppColors.error),
+                label: const Text(
+                  'Sign Out',
+                  style: TextStyle(color: AppColors.error),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: const BorderSide(color: AppColors.error),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleSignOut() async {
+    final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
+    
+    // Show confirmation dialog
+    final shouldSignOut = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Sign Out'),
+        content: const Text('Are you sure you want to sign out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            style: TextButton.styleFrom(foregroundColor: AppColors.error),
+            child: const Text('Sign Out'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldSignOut == true) {
+      await authViewModel.signOut();
+      
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginScreen()),
+          (route) => false,
+        );
+      }
     }
   }
 }
