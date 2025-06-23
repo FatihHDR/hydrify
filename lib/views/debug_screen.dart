@@ -4,6 +4,7 @@ import '../viewmodels/achievement_viewmodel.dart';
 import '../viewmodels/home_viewmodel.dart';
 import '../services/database_service.dart';
 import '../utils/app_theme.dart';
+import 'analytics_screen.dart';
 
 class DebugScreen extends StatelessWidget {
   const DebugScreen({super.key});
@@ -104,6 +105,25 @@ class DebugScreen extends StatelessWidget {
                 );
               },
               child: const Text('Add Water & Check Achievements'),
+            ),
+            
+            const SizedBox(height: 16),
+            
+            // Analytics Screen Button
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AnalyticsScreen(),
+                  ),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.accent,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Open Analytics Screen'),
             ),
             
             const SizedBox(height: 16),

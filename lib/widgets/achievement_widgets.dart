@@ -125,7 +125,6 @@ class AchievementUnlockedDialog extends StatelessWidget {
       ),
     );
   }
-
   static void show(BuildContext context, Achievement achievement, {VoidCallback? onClose}) {
     showDialog(
       context: context,
@@ -135,6 +134,21 @@ class AchievementUnlockedDialog extends StatelessWidget {
         onClose: onClose,
       ),
     );
+  }
+
+  static void showMultiple(BuildContext context, List<Achievement> achievements, {VoidCallback? onClose}) {
+    if (achievements.length == 1) {
+      show(context, achievements.first, onClose: onClose);
+    } else {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => MultipleAchievementsDialog(
+          achievements: achievements,
+          onClose: onClose,
+        ),
+      );
+    }
   }
 }
 
@@ -325,23 +339,7 @@ class _MultipleAchievementsDialogState extends State<MultipleAchievementsDialog>
             color: AppColors.textSecondary,
           ),
           textAlign: TextAlign.center,
-        ),
-      ],
+        ),      ],
     );
-  }
-
-  static void show(BuildContext context, List<Achievement> achievements, {VoidCallback? onClose}) {
-    if (achievements.length == 1) {
-      AchievementUnlockedDialog.show(context, achievements.first, onClose: onClose);
-    } else {
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => MultipleAchievementsDialog(
-          achievements: achievements,
-          onClose: onClose,
-        ),
-      );
-    }
   }
 }

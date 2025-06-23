@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/analytics_viewmodel.dart';
 import '../widgets/analytics_widgets.dart';
+import '../widgets/gradient_background.dart';
 import '../models/analytics_model.dart';
 import '../utils/app_theme.dart';
 
@@ -30,20 +31,20 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
     _tabController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Advanced Analytics'),
-        backgroundColor: AppColors.waterBlue,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        bottom: TabBar(
+    return GradientBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: const Text('Analytics'),
+          backgroundColor: Colors.transparent,
+          foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
+          elevation: 0,        bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
+          indicatorColor: AppColors.waterBlue,
+          labelColor: Theme.of(context).textTheme.titleLarge?.color,
+          unselectedLabelColor: Theme.of(context).textTheme.titleLarge?.color?.withOpacity(0.6),
           isScrollable: true,
           tabs: const [
             Tab(text: 'Overview'),
@@ -56,7 +57,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
           Consumer<AnalyticsViewModel>(
             builder: (context, analyticsVM, child) {
               return PopupMenuButton<String>(
-                icon: const Icon(Icons.date_range, color: Colors.white),
+                icon: Icon(Icons.date_range, color: Theme.of(context).textTheme.titleLarge?.color),
                 onSelected: (value) {
                   if (value == 'custom') {
                     _showDateRangePicker(context, analyticsVM);
@@ -107,7 +108,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
             },
           ),
           IconButton(
-            icon: const Icon(Icons.refresh, color: Colors.white),
+            icon: Icon(Icons.refresh, color: Theme.of(context).textTheme.titleLarge?.color),
             onPressed: () {
               Provider.of<AnalyticsViewModel>(context, listen: false)
                   .refreshAnalytics();
@@ -194,10 +195,10 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
               _buildTrendsTab(analyticsVM),
               _buildInsightsTab(analyticsVM),
               _buildProgressTab(analyticsVM),
-            ],
-          );
+            ],          );
         },
-      ),
+      )
+      ), // Close GradientBackground
     );
   }
 
