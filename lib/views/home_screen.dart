@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../viewmodels/home_viewmodel.dart';
 import '../viewmodels/achievement_viewmodel.dart';
 import '../widgets/common_widgets.dart';
+import '../widgets/advanced_widgets.dart';
 import '../utils/app_theme.dart';
 import '../utils/helpers.dart';
 
@@ -163,28 +164,94 @@ class _HomeScreenState extends State<HomeScreen> {  @override
       ),
     );
   }
-
   Widget _buildProgressCard(HomeViewModel viewModel) {
-    return WaterProgressCard(
-      currentAmount: viewModel.todayTotal,
-      targetAmount: viewModel.userProfile!.dailyGoal,
-      title: 'Today\'s Progress',
+    final progress = viewModel.userProfile!.dailyGoal > 0 
+        ? (viewModel.todayTotal / viewModel.userProfile!.dailyGoal).clamp(0.0, 1.0) 
+        : 0.0;
+    final percentage = (progress * 100).round();
+
+    return Card(
+      elevation: 4,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          gradient: AppColors.primaryGradient,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [          const LocalizedText(
+            'todays_progress',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+            const SizedBox(height: 20),            Row(
+              children: [
+                // 3D Bottle Visualization
+                Bottle3DVisualization(
+                  fillPercentage: progress,
+                  width: 80,
+                  height: 120,
+                  bottleColor: Colors.white.withOpacity(0.7),
+                  waterColor: Colors.white,
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${(viewModel.todayTotal / 1000).toStringAsFixed(1)}L / ${(viewModel.userProfile!.dailyGoal / 1000).toStringAsFixed(1)}L',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        '$percentage% completed',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.9),
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      // Animated Water Wave Progress
+                      AnimatedWaterWaveProgress(
+                        progress: progress,
+                        width: 150,
+                        height: 20,
+                        waveColor: Colors.white.withOpacity(0.8),
+                        backgroundColor: Colors.white.withOpacity(0.2),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 
   Widget _buildQuickAddSection(HomeViewModel viewModel) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [        const Text(
-          'Quick Add',
+      children: [        const LocalizedText(
+          'quick_add',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),
         ),
-        const SizedBox(height: 12),
-        SizedBox(
+        const SizedBox(height: 12),        SizedBox(
           height: 90,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
@@ -193,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {  @override
               final amount = viewModel.getQuickAddAmounts()[index];
               return Padding(
                 padding: const EdgeInsets.only(right: 12),
-                child: QuickAddButton(
+                child: AccessibleWaterButton(
                   amount: amount,
                   onTap: () => viewModel.addWaterIntake(amount),
                 ),

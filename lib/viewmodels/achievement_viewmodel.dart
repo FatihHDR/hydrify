@@ -20,13 +20,14 @@ class AchievementViewModel extends ChangeNotifier {
   int get totalUnlocked => unlockedAchievements.length;
   int get totalAchievements => _achievements.length;
   double get completionPercentage => totalAchievements > 0 ? totalUnlocked / totalAchievements : 0.0;
-
   Future<void> initialize() async {
     _isLoading = true;
     notifyListeners();
 
     try {
+      debugPrint('AchievementViewModel: Starting initialization...');
       await _loadAchievements();
+      debugPrint('AchievementViewModel: Initialization completed. Total achievements: ${_achievements.length}');
     } catch (e) {
       debugPrint('Error initializing AchievementViewModel: $e');
     } finally {
@@ -36,16 +37,17 @@ class AchievementViewModel extends ChangeNotifier {
   }
 
   Future<void> _loadAchievements() async {
-    final storedAchievements = await _databaseService.getAchievements();
+    // Ensure default achievements are initialized
+    debugPrint('AchievementViewModel: Initializing default achievements...');
+    await _databaseService.initializeDefaultAchievements();
     
-    if (storedAchievements.isEmpty) {
-      // First time setup - initialize with default achievements
-      _achievements = Achievement.getDefaultAchievements();
-      for (final achievement in _achievements) {
-        await _databaseService.insertAchievement(achievement);
-      }
-    } else {
-      _achievements = storedAchievements;
+    // Load achievements from database
+    debugPrint('AchievementViewModel: Loading achievements from database...');
+    _achievements = await _databaseService.getAchievements();
+    debugPrint('AchievementViewModel: Loaded ${_achievements.length} achievements');
+    
+    for (final achievement in _achievements) {
+      debugPrint('Achievement: ${achievement.id} - ${achievement.title} - Unlocked: ${achievement.isUnlocked}');
     }
     
     notifyListeners();

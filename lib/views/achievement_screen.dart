@@ -33,12 +33,20 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
+      backgroundColor: AppColors.background,      appBar: AppBar(
         title: const Text('Achievements'),
         backgroundColor: AppColors.waterBlue,
         foregroundColor: Colors.white,
         elevation: 0,
+        actions: [
+          // Debug button to refresh achievements
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () {
+              Provider.of<AchievementViewModel>(context, listen: false).refreshAchievements();
+            },
+          ),
+        ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.white,

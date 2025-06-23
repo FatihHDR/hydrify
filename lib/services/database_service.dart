@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
+import 'package:flutter/foundation.dart';
 import '../models/water_intake_model.dart';
 import '../models/user_profile_model.dart';
 import '../models/achievement_model.dart';
@@ -17,13 +18,13 @@ class DatabaseService {
     _database = await _initDatabase();
     return _database!;
   }
-
   Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'hydrify.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
 
@@ -64,6 +65,24 @@ class DatabaseService {
         color INTEGER NOT NULL
       )
     ''');
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('''
+        CREATE TABLE achievements (
+          id TEXT PRIMARY KEY,
+          title TEXT NOT NULL,
+          description TEXT NOT NULL,
+          icon INTEGER NOT NULL,
+          requiredValue INTEGER NOT NULL,
+          isUnlocked INTEGER NOT NULL,
+          unlockedDate TEXT,
+          type INTEGER NOT NULL,
+          color INTEGER NOT NULL
+        )
+      ''');
+    }
   }
 
   // Water Intake CRUD operations
@@ -299,5 +318,24 @@ class DatabaseService {
     }
     
     return streak;
+  }
+  Future<void> initializeDefaultAchievements() async {
+    debugPrint('DatabaseService: Checking for existing achievements...');
+    final existingAchievements = await getAchievements();
+    debugPrint('DatabaseService: Found ${existingAchievements.length} existing achievements');
+    
+    if (existingAchievements.isEmpty) {
+      debugPrint('DatabaseService: No achievements found, initializing defaults...');
+      final defaultAchievements = Achievement.getDefaultAchievements();
+      debugPrint('DatabaseService: Generated ${defaultAchievements.length} default achievements');
+      
+      for (final achievement in defaultAchievements) {
+        debugPrint('DatabaseService: Inserting achievement: ${achievement.id}');
+        await insertAchievement(achievement);
+      }
+      debugPrint('DatabaseService: Initialized ${defaultAchievements.length} default achievements');
+    } else {
+      debugPrint('DatabaseService: Achievements already exist, skipping initialization');
+    }
   }
 }

@@ -7,6 +7,7 @@ import '../utils/app_theme.dart';
 import '../utils/helpers.dart';
 import '../widgets/common_widgets.dart';
 import 'login_screen.dart';
+import 'debug_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -59,8 +60,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         title: const Text('Profile'),
         backgroundColor: AppColors.waterBlue,
         foregroundColor: Colors.white,
-        elevation: 0,
-        actions: [
+        elevation: 0,        actions: [
+          // Debug button
+          IconButton(
+            icon: const Icon(Icons.bug_report),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const DebugScreen()),
+              );
+            },
+          ),
           Consumer<ProfileViewModel>(
             builder: (context, viewModel, child) {
               return TextButton(
