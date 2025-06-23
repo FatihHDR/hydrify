@@ -11,38 +11,37 @@ class AppColors {  // Modern minimalist color palette
   static const Color waterBlue = Color(0xFF3B82F6); // Clean blue
   static const Color waterBlueDark = Color(0xFF2563EB);
   static const Color waterBlueLight = Color(0xFFDBEAFE);
-  
-  // Background colors
-  static const Color background = Color(0xFFF8F9FA);
+    // Modern neutral backgrounds
+  static const Color background = Color(0xFFFAFAFA); // Softer white
   static const Color surface = Color(0xFFFFFFFF);
-  static const Color surfaceVariant = Color(0xFFF5F5F5);  // Text colors
-  static const Color textPrimary = Color(0xFF000000); // Black - sangat gelap
-  static const Color textSecondary = Color(0xFF1A1A1A); // Almost black - sangat gelap
-  static const Color textLight = Color(0xFF424242); // Dark gray - gelap
+  static const Color surfaceVariant = Color(0xFFF8FAFC); // Very light gray
   
-  // Status colors
-  static const Color success = Color(0xFF4CAF50);
-  static const Color warning = Color(0xFFFF9800);
-  static const Color error = Color(0xFFF44336);
-  static const Color info = Color(0xFF2196F3);
-  
-  // Gradient colors
+  // Professional text colors
+  static const Color textPrimary = Color(0xFF111827); // Near black
+  static const Color textSecondary = Color(0xFF6B7280); // Professional gray
+  static const Color textLight = Color(0xFF9CA3AF); // Light gray
+    // Status colors - modern and subtle
+  static const Color success = Color(0xFF10B981); // Modern green
+  static const Color warning = Color(0xFFF59E0B); // Modern amber
+  static const Color error = Color(0xFFEF4444); // Modern red
+  static const Color info = Color(0xFF3B82F6); // Modern blue
+    // Minimalist gradients
   static const LinearGradient primaryGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [waterBlue, waterBlueDark],
+    colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
   );
   
-  static const LinearGradient successGradient = LinearGradient(
-    begin: Alignment.topLeft,
-    end: Alignment.bottomRight,
-    colors: [success, Color(0xFF66BB6A)],
-  );
-  
-  static const LinearGradient backgroundGradient = LinearGradient(
+  static const LinearGradient subtleGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [background, surface],
+    colors: [Color(0xFFFAFAFA), Color(0xFFFFFFFF)],
+  );
+  
+  static const LinearGradient cardGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFFFFFFFF), Color(0xFFF8FAFC)],
   );
 }
 
@@ -137,23 +136,44 @@ class AppTheme {
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
+      ),      elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.waterBlue,
           foregroundColor: Colors.white,
-          elevation: 2,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          elevation: 0, // Flat design
+          shadowColor: Colors.transparent,
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16), // More rounded
+          ),
+          textStyle: GoogleFonts.montserrat(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
           ),
         ),
-      ),      cardTheme: const CardThemeData(
-        elevation: 2,
-        color: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16)),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.waterBlue,
+          side: const BorderSide(color: AppColors.waterBlue, width: 1.5),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          textStyle: GoogleFonts.montserrat(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
         ),
+      ),      cardTheme: CardThemeData(
+        elevation: 0, // Flat cards
+        color: AppColors.surface,
+        shadowColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(20)), // More rounded
+          side: BorderSide(color: AppColors.textLight, width: 0.5), // Subtle border
+        ),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
       inputDecorationTheme: InputDecorationTheme(
         border: OutlineInputBorder(
