@@ -123,8 +123,7 @@ class WaterWavePainter extends CustomPainter {
     required this.progress,
     required this.waveColor,
     required this.backgroundColor,
-  });
-  @override
+  });  @override
   void paint(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
@@ -133,26 +132,41 @@ class WaterWavePainter extends CustomPainter {
     final bgPaint = Paint()
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(center, radius, bgPaint);
-
-    // Draw water waves with smoother animation
+    canvas.drawCircle(center, radius, bgPaint);    // Create much smoother and more natural wave animation
     final waterLevel = size.height * (1 - progress);
-    
-    final wavePaint = Paint()
-      ..color = waveColor
-      ..style = PaintingStyle.fill;
 
     final path = Path();
-      // Create smoother wave pattern
-    const waveAmplitude = 8.0;
     
-    for (double i = 0; i <= size.width; i += 2) {
+    // Enhanced wave parameters for more natural look
+    const baseWaveAmplitude = 6.0;
+    const waveFrequency1 = 0.02; // Main wave
+    const waveFrequency2 = 0.035; // Secondary wave
+    const waveFrequency3 = 0.055; // Tertiary wave for detail
+    
+    // Create continuous smooth wave
+    for (double i = 0; i <= size.width + 2; i += 1) {
       double waveHeight = 0;
       
-      // Multiple wave frequencies for more natural look
-      waveHeight += waveAmplitude * 0.5 * math.sin((i / 30) + (animationValue * 2 * math.pi));
-      waveHeight += waveAmplitude * 0.3 * math.sin((i / 20) + (animationValue * 3 * math.pi));
-      waveHeight += waveAmplitude * 0.2 * math.sin((i / 15) + (animationValue * 4 * math.pi));
+      // Layer multiple sine waves for natural ocean-like movement
+      // Primary wave - slow and large
+      waveHeight += baseWaveAmplitude * 0.6 * math.sin(
+          (i * waveFrequency1) + (animationValue * 2.0 * math.pi)
+      );
+      
+      // Secondary wave - medium speed, opposite direction
+      waveHeight += baseWaveAmplitude * 0.25 * math.sin(
+          (i * waveFrequency2) - (animationValue * 2.8 * math.pi) + math.pi / 3
+      );
+      
+      // Tertiary wave - fast and small for surface detail
+      waveHeight += baseWaveAmplitude * 0.15 * math.sin(
+          (i * waveFrequency3) + (animationValue * 4.2 * math.pi) + math.pi / 6
+      );
+      
+      // Add subtle random variation for more realism
+      waveHeight += baseWaveAmplitude * 0.1 * math.sin(
+          (i * 0.08) + (animationValue * 1.5 * math.pi)
+      );
       
       final y = waterLevel + waveHeight;
       
@@ -163,30 +177,79 @@ class WaterWavePainter extends CustomPainter {
       }
     }
     
+    // Complete the water shape
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
     path.close();
 
-    // Clip to circle and draw water
+    // Clip to circle and draw water with gradient effect
     canvas.save();
     final clipPath = Path()..addOval(Rect.fromCircle(center: center, radius: radius - 1));
     canvas.clipPath(clipPath);
-    canvas.drawPath(path, wavePaint);
+      // Add subtle gradient to water for depth
+    final waterGradientShader = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        waveColor.withOpacity(0.7),
+        waveColor,
+        waveColor.withOpacity(0.9),
+      ],
+      stops: const [0.0, 0.5, 1.0],
+    ).createShader(Rect.fromLTWH(0, waterLevel, size.width, size.height - waterLevel));
+    
+    final gradientPaint = Paint()..shader = waterGradientShader;
+    path.fillType = PathFillType.nonZero;
+    canvas.drawPath(path, gradientPaint);
+    
+    // Add surface foam/bubbles effect near the water line
+    if (progress > 0.1) {
+      final foamPaint = Paint()
+        ..color = Colors.white.withOpacity(0.3)
+        ..style = PaintingStyle.fill;
+      
+      // Create small foam bubbles along the wave line
+      for (double i = 0; i <= size.width; i += 12) {
+        final bubbleOffset = 2.0 * math.sin((i * 0.1) + (animationValue * 3 * math.pi));
+        final bubbleY = waterLevel + bubbleOffset - 3;
+        
+        // Only draw bubbles within the circle
+        final distanceFromCenter = math.sqrt(
+            math.pow(i - center.dx, 2) + math.pow(bubbleY - center.dy, 2)
+        );
+        
+        if (distanceFromCenter < radius - 5) {
+          canvas.drawCircle(
+            Offset(i, bubbleY),
+            1.5 + (0.5 * math.sin((i * 0.2) + (animationValue * 2 * math.pi))),
+            foamPaint,
+          );
+        }
+      }
+    }
+    
     canvas.restore();
 
-    // Draw circle border
+    // Draw enhanced circle border with depth
     final borderPaint = Paint()
-      ..color = waveColor.withOpacity(0.8)
+      ..color = waveColor.withOpacity(0.9)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+      ..strokeWidth = 2.5;
     canvas.drawCircle(center, radius, borderPaint);
 
-    // Add inner highlight
-    final highlightPaint = Paint()
-      ..color = Colors.white.withOpacity(0.2)
+    // Add inner rim highlight for 3D effect
+    final innerHighlightPaint = Paint()
+      ..color = Colors.white.withOpacity(0.4)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.5;
+    canvas.drawCircle(center, radius - 2, innerHighlightPaint);
+    
+    // Add outer subtle shadow
+    final shadowPaint = Paint()
+      ..color = waveColor.withOpacity(0.2)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
-    canvas.drawCircle(center, radius - 3, highlightPaint);
+    canvas.drawCircle(center, radius + 1, shadowPaint);
   }
 
   @override
@@ -289,125 +352,238 @@ class Bottle3DPainter extends CustomPainter {
     required this.fillPercentage,
     required this.bottleColor,
     required this.waterColor,
-  });
-  @override
+  });  @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()..style = PaintingStyle.stroke..strokeWidth = 3;
+    final paint = Paint()..style = PaintingStyle.stroke..strokeWidth = 2.5;
 
-    // Bottle dimensions - make it more bottle-like
-    final bottleWidth = size.width * 0.7;
-    final bottleHeight = size.height * 0.8;
-    final neckWidth = size.width * 0.25;
-    final neckHeight = size.height * 0.2;
+    // More realistic bottle proportions
+    final bottleWidth = size.width * 0.65;
+    final bottleHeight = size.height * 0.75;
+    final neckWidth = size.width * 0.22;
+    final neckHeight = size.height * 0.18;
+    final shoulderHeight = size.height * 0.12;
 
-    // Bottle body coordinates
+    // Bottle coordinates
     final left = (size.width - bottleWidth) / 2;
     final right = left + bottleWidth;
-    final bottom = size.height - 5;
+    final bottom = size.height - 8;
     final top = size.height - bottleHeight;
+    final shoulderTop = top - shoulderHeight;
 
     // Neck coordinates
     final neckLeft = (size.width - neckWidth) / 2;
     final neckRight = neckLeft + neckWidth;
 
-    // Draw bottle body (more realistic shape)
+    // Draw realistic bottle shape with rounded bottom
     final bottlePath = Path();
-    bottlePath.moveTo(left, bottom);
-    bottlePath.lineTo(left, top + 30);
-    bottlePath.quadraticBezierTo(left, top + 10, left + 15, top + 5);
-    bottlePath.lineTo(neckLeft, top + 5);
-    bottlePath.lineTo(neckLeft, neckHeight + 10);
-    bottlePath.quadraticBezierTo(neckLeft, neckHeight, neckLeft + 5, neckHeight - 5);
-    bottlePath.lineTo(neckRight - 5, neckHeight - 5);
-    bottlePath.quadraticBezierTo(neckRight, neckHeight, neckRight, neckHeight + 10);
-    bottlePath.lineTo(neckRight, top + 5);
-    bottlePath.lineTo(right - 15, top + 5);
-    bottlePath.quadraticBezierTo(right, top + 10, right, top + 30);
-    bottlePath.lineTo(right, bottom);
+    
+    // Start from bottom left, create rounded bottom
+    bottlePath.moveTo(left + 8, bottom);
+    bottlePath.quadraticBezierTo(left, bottom, left, bottom - 8);
+    
+    // Left side with slight curve
+    bottlePath.lineTo(left, top + 25);
+    bottlePath.quadraticBezierTo(left, top + 15, left + 8, top + 10);
+    
+    // Shoulder transition to neck
+    bottlePath.quadraticBezierTo(left + 20, shoulderTop + 5, neckLeft + 2, shoulderTop);
+    bottlePath.lineTo(neckLeft, shoulderTop - 2);
+    
+    // Neck
+    bottlePath.lineTo(neckLeft, neckHeight + 8);
+    bottlePath.quadraticBezierTo(neckLeft, neckHeight + 3, neckLeft + 3, neckHeight);
+    
+    // Bottle mouth/rim
+    bottlePath.lineTo(neckRight - 3, neckHeight);
+    bottlePath.quadraticBezierTo(neckRight, neckHeight + 3, neckRight, neckHeight + 8);
+    
+    // Right neck
+    bottlePath.lineTo(neckRight, shoulderTop - 2);
+    bottlePath.lineTo(neckRight - 2, shoulderTop);
+    
+    // Right shoulder
+    bottlePath.quadraticBezierTo(right - 20, shoulderTop + 5, right - 8, top + 10);
+    
+    // Right side
+    bottlePath.quadraticBezierTo(right, top + 15, right, top + 25);
+    bottlePath.lineTo(right, bottom - 8);
+    
+    // Rounded bottom right
+    bottlePath.quadraticBezierTo(right, bottom, right - 8, bottom);
     bottlePath.close();
 
-    // Draw bottle cap
+    // Draw bottle cap with more detail
     final capPath = Path();
-    capPath.moveTo(neckLeft - 2, neckHeight + 10);
-    capPath.lineTo(neckLeft - 2, 5);
-    capPath.quadraticBezierTo(neckLeft - 2, 0, neckLeft + 3, 0);
-    capPath.lineTo(neckRight - 3, 0);
-    capPath.quadraticBezierTo(neckRight + 2, 0, neckRight + 2, 5);
-    capPath.lineTo(neckRight + 2, neckHeight + 10);
+    capPath.moveTo(neckLeft - 3, neckHeight + 8);
+    capPath.lineTo(neckLeft - 3, 8);
+    capPath.quadraticBezierTo(neckLeft - 3, 3, neckLeft + 2, 2);
+    capPath.lineTo(neckRight - 2, 2);
+    capPath.quadraticBezierTo(neckRight + 3, 3, neckRight + 3, 8);
+    capPath.lineTo(neckRight + 3, neckHeight + 8);
     capPath.close();
 
-    // Draw bottle outline
-    paint.color = bottleColor;
-    canvas.drawPath(bottlePath, paint);
-    canvas.drawPath(capPath, paint);
+    // Add cap ridges for realism
+    final capRidge1 = Path();
+    capRidge1.moveTo(neckLeft - 1, 12);
+    capRidge1.lineTo(neckRight + 1, 12);
+    
+    final capRidge2 = Path();
+    capRidge2.moveTo(neckLeft - 1, 16);
+    capRidge2.lineTo(neckRight + 1, 16);
 
-    // Draw water with better shape
+    // Draw bottle with gradient effect
+    paint.color = bottleColor.withOpacity(0.8);
+    canvas.drawPath(bottlePath, paint);
+    
+    // Draw cap
+    paint.color = bottleColor;
+    canvas.drawPath(capPath, paint);
+    
+    // Draw cap ridges
+    paint.strokeWidth = 1;
+    canvas.drawPath(capRidge1, paint);
+    canvas.drawPath(capRidge2, paint);
+    
+    paint.strokeWidth = 2.5;    // Draw water with realistic bottle-following shape
     if (fillPercentage > 0) {
-      final waterHeight = (bottleHeight - 35) * fillPercentage;
-      final waterTop = bottom - waterHeight;
+      final maxWaterHeight = bottleHeight - 30; // Account for bottle curves
+      final waterHeight = maxWaterHeight * fillPercentage;
+      final waterTop = bottom - 8 - waterHeight;
 
       final waterPaint = Paint()
-        ..color = waterColor.withOpacity(0.8)
+        ..color = waterColor.withOpacity(0.7)
         ..style = PaintingStyle.fill;
 
       final waterPath = Path();
-      waterPath.moveTo(left + 3, bottom - 3);
       
-      // Water follows bottle contours
-      if (waterTop > top + 30) {
-        // Water is in main bottle body
+      // Start from bottom, matching bottle contours
+      waterPath.moveTo(left + 8, bottom - 8);
+      waterPath.quadraticBezierTo(left + 3, bottom - 8, left + 3, bottom - 12);
+      
+      if (waterTop > top + 25) {
+        // Water is in main body only
         waterPath.lineTo(left + 3, waterTop);
-        waterPath.quadraticBezierTo(left + 3, waterTop - 3, left + 8, waterTop - 3);
-        waterPath.lineTo(right - 8, waterTop - 3);
-        waterPath.quadraticBezierTo(right - 3, waterTop - 3, right - 3, waterTop);
+        
+        // Create slightly wavy water surface
+        final waveAmplitude = 2.0;
+        final segments = 8;
+        final segmentWidth = (bottleWidth - 16) / segments;
+        
+        for (int i = 0; i <= segments; i++) {
+          final x = left + 8 + (i * segmentWidth);
+          final waveOffset = waveAmplitude * math.sin(i * 0.8);
+          final y = waterTop + waveOffset;
+          
+          if (i == 0) {
+            waterPath.lineTo(x, y);
+          } else {
+            waterPath.lineTo(x, y);
+          }
+        }
+        
+        waterPath.lineTo(right - 3, waterTop);
+      } else if (waterTop > shoulderTop) {
+        // Water reaches shoulder area
+        waterPath.lineTo(left + 3, top + 25);
+        waterPath.quadraticBezierTo(left + 3, top + 18, left + 10, top + 15);
+        waterPath.lineTo(left + 18, waterTop);
+        waterPath.lineTo(right - 18, waterTop);
+        waterPath.lineTo(right - 10, top + 15);
+        waterPath.quadraticBezierTo(right - 3, top + 18, right - 3, top + 25);
       } else {
         // Water reaches neck area
-        waterPath.lineTo(left + 3, top + 30);
-        waterPath.quadraticBezierTo(left + 3, top + 13, left + 18, top + 8);
-        waterPath.lineTo(neckLeft + 3, top + 8);
-        waterPath.lineTo(neckLeft + 3, waterTop);
-        waterPath.lineTo(neckRight - 3, waterTop);
-        waterPath.lineTo(neckRight - 3, top + 8);
-        waterPath.lineTo(right - 18, top + 8);
-        waterPath.quadraticBezierTo(right - 3, top + 13, right - 3, top + 30);
+        waterPath.lineTo(left + 3, top + 25);
+        waterPath.quadraticBezierTo(left + 3, top + 18, left + 10, top + 15);
+        waterPath.quadraticBezierTo(left + 18, shoulderTop + 8, neckLeft + 4, shoulderTop + 3);
+        waterPath.lineTo(neckLeft + 4, waterTop);
+        waterPath.lineTo(neckRight - 4, waterTop);
+        waterPath.lineTo(neckRight - 4, shoulderTop + 3);
+        waterPath.quadraticBezierTo(right - 18, shoulderTop + 8, right - 10, top + 15);
+        waterPath.quadraticBezierTo(right - 3, top + 18, right - 3, top + 25);
       }
       
-      waterPath.lineTo(right - 3, bottom - 3);
+      // Complete water shape
+      waterPath.lineTo(right - 3, bottom - 12);
+      waterPath.quadraticBezierTo(right - 3, bottom - 8, right - 8, bottom - 8);
       waterPath.close();
 
       canvas.drawPath(waterPath, waterPaint);
 
-      // Add water surface reflection
-      final reflectionPaint = Paint()
-        ..color = Colors.white.withOpacity(0.3)
+      // Add realistic water surface with light reflection
+      final surfaceReflectionPaint = Paint()
+        ..color = Colors.white.withOpacity(0.4)
         ..style = PaintingStyle.fill;
 
-      if (waterTop > top + 30) {
-        // Reflection on main body
-        final reflectionWidth = bottleWidth - 16;
-        canvas.drawOval(
+      if (waterTop > top + 25) {
+        // Main body water surface reflection
+        final reflectionPath = Path();
+        final reflectionWidth = bottleWidth - 20;
+        
+        // Create elliptical reflection
+        reflectionPath.addOval(
           Rect.fromCenter(
-            center: Offset(size.width / 2, waterTop - 2),
+            center: Offset(size.width / 2, waterTop - 1),
             width: reflectionWidth,
-            height: 6,
+            height: 4,
           ),
-          reflectionPaint,
         );
+        canvas.drawPath(reflectionPath, surfaceReflectionPaint);
       }
+      
+      // Add water shimmer effect
+      final shimmerPaint = Paint()
+        ..color = Colors.white.withOpacity(0.2)
+        ..style = PaintingStyle.fill;
+        
+      final shimmerPath = Path();
+      shimmerPath.addOval(
+        Rect.fromLTWH(
+          left + 12, 
+          waterTop + (waterHeight * 0.3), 
+          8, 
+          waterHeight * 0.4
+        ),
+      );
+      canvas.drawPath(shimmerPath, shimmerPaint);
     }
 
-    // Add bottle highlight
+    // Add realistic bottle highlights and shadows
     final highlightPaint = Paint()
-      ..color = Colors.white.withOpacity(0.4)
+      ..color = Colors.white.withOpacity(0.6)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2;
+      ..strokeWidth = 1.5;
 
+    // Main body highlight (left side)
     final highlightPath = Path();
-    highlightPath.moveTo(left + 8, bottom - 10);
-    highlightPath.lineTo(left + 8, top + 35);
-    highlightPath.quadraticBezierTo(left + 8, top + 20, left + 20, top + 15);
+    highlightPath.moveTo(left + 6, bottom - 15);
+    highlightPath.quadraticBezierTo(left + 6, bottom - 20, left + 8, bottom - 22);
+    highlightPath.lineTo(left + 8, top + 30);
+    highlightPath.quadraticBezierTo(left + 8, top + 22, left + 12, top + 18);
+    highlightPath.quadraticBezierTo(left + 16, shoulderTop + 12, neckLeft + 6, shoulderTop + 8);
 
     canvas.drawPath(highlightPath, highlightPaint);
+    
+    // Add subtle shadow on right side
+    final shadowPaint = Paint()
+      ..color = bottleColor.withOpacity(0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+
+    final shadowPath = Path();
+    shadowPath.moveTo(right - 4, bottom - 15);
+    shadowPath.lineTo(right - 4, top + 30);
+    canvas.drawPath(shadowPath, shadowPaint);
+
+    // Cap highlight
+    final capHighlightPaint = Paint()
+      ..color = Colors.white.withOpacity(0.8)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+      
+    final capHighlight = Path();
+    capHighlight.moveTo(neckLeft + 2, 6);
+    capHighlight.lineTo(neckLeft + 2, neckHeight + 6);
+    canvas.drawPath(capHighlight, capHighlightPaint);
   }
 
   @override
@@ -556,17 +732,17 @@ class FloatingBottomNavBar extends StatelessWidget {
     required this.onTap,
     required this.items,
   });
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(16),
+      margin: const EdgeInsets.all(12),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(25),        child: Container(
-          height: 60,
+        borderRadius: BorderRadius.circular(25),
+        child: Container(
+          height: 56,
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(25),
             boxShadow: [
               BoxShadow(
                 color: AppColors.textLight.withOpacity(0.15),
@@ -584,28 +760,23 @@ class FloatingBottomNavBar extends StatelessWidget {
 
               return Expanded(
                 child: GestureDetector(
-                  onTap: () => onTap(index),                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: isSelected 
-                                ? AppColors.waterBlue
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Icon(
-                            item.icon,
-                            color: isSelected ? Colors.white : AppColors.textLight,
-                            size: 26,
-                          ),
-                        ),
-                      ],
+                  onTap: () => onTap(index),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: isSelected 
+                            ? AppColors.waterBlue
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Icon(
+                        item.icon,
+                        color: isSelected ? Colors.white : AppColors.textLight,
+                        size: 26,
+                      ),
                     ),
                   ),
                 ),

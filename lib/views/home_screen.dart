@@ -374,8 +374,8 @@ class _HomeScreenState extends State<HomeScreen> {  @override
                 const SizedBox(width: 16),
                 Expanded(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [                      const Text(
+                    crossAxisAlignment: CrossAxisAlignment.start,                    children: [
+                      const Text(
                         'Achievements',
                         style: TextStyle(
                           fontSize: 16,
