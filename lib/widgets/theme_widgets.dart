@@ -254,3 +254,94 @@ class AnimatedThemeContainer extends StatelessWidget {
     );
   }
 }
+
+class ThemeTransitionOverlay extends StatefulWidget {
+  final Widget child;
+  
+  const ThemeTransitionOverlay({
+    super.key,
+    required this.child,
+  });
+
+  @override
+  State<ThemeTransitionOverlay> createState() => _ThemeTransitionOverlayState();
+}
+
+class _ThemeTransitionOverlayState extends State<ThemeTransitionOverlay>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _fadeAnimation;
+  bool _showOverlay = false;
+  
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 300),
+      vsync: this,
+    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 0.3,
+    ).animate(CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _showTransition() async {
+    setState(() {
+      _showOverlay = true;
+    });
+    
+    await _controller.forward();
+    await Future.delayed(const Duration(milliseconds: 200));
+    await _controller.reverse();
+    
+    setState(() {
+      _showOverlay = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<ThemeManager>(
+      builder: (context, themeManager, child) {
+        // Show transition overlay when theme is animating
+        if (themeManager.isAnimating && !_showOverlay) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _showTransition();
+          });
+        }
+        
+        return Stack(
+          children: [
+            widget.child,
+            if (_showOverlay)
+              AnimatedBuilder(
+                animation: _fadeAnimation,
+                builder: (context, child) {
+                  return Container(
+                    color: Colors.black.withOpacity(_fadeAnimation.value),
+                    child: const Center(
+                      child: Icon(
+                        Icons.brightness_6,
+                        size: 48,
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
+                },
+              ),
+          ],
+        );
+      },
+    );
+  }
+}
