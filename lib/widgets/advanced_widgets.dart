@@ -949,12 +949,11 @@ class FloatingBottomNavBar extends StatelessWidget {
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 300),
                       curve: Curves.easeInOut,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
+                      padding: const EdgeInsets.all(8),                      decoration: BoxDecoration(
                         color: isSelected 
                             ? AppColors.waterBlue.withOpacity(0.9)
                             : Colors.transparent,
-                        borderRadius: BorderRadius.circular(16),
+                        shape: BoxShape.circle, // Changed to circular shape
                         boxShadow: isSelected ? [
                           BoxShadow(
                             color: AppColors.waterBlue.withOpacity(0.3),
