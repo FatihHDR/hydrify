@@ -542,11 +542,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   color: AppColors.waterBlue,
                   size: 24,
                 ),
-                const SizedBox(width: 12),
-                Text(
+                const SizedBox(width: 12),                Text(
                   'Account',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: AppColors.textPrimary,
+                    color: AppColors.textSecondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

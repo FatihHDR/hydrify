@@ -297,12 +297,12 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
+      children: [        const Text(
           'Insights',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
           ),
         ),
         const SizedBox(height: 12),

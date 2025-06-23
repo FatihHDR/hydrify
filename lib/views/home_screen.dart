@@ -173,12 +173,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildQuickAddSection(HomeViewModel viewModel) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
+      children: [        const Text(
           'Quick Add',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
           ),
         ),
         const SizedBox(height: 12),
@@ -239,14 +239,14 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
+          children: [            const Text(
               'Today\'s Intake',
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
+                color: AppColors.textPrimary,
               ),
-            ),            Text(
+            ),Text(
               '${viewModel.todayIntakes.length} entries',
               style: const TextStyle(
                 fontSize: 14,
