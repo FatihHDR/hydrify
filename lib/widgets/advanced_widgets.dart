@@ -10,6 +10,7 @@ class AnimatedWaterWaveProgress extends StatefulWidget {
   final Color waveColor;
   final Color backgroundColor;
   final String? centerText;
+  final bool isCircular; // New parameter to control shape
 
   const AnimatedWaterWaveProgress({
     super.key,
@@ -19,6 +20,7 @@ class AnimatedWaterWaveProgress extends StatefulWidget {
     this.waveColor = AppColors.waterBlue,
     this.backgroundColor = AppColors.background,
     this.centerText,
+    this.isCircular = true, // Default to circular for backward compatibility
   });
 
   @override
@@ -85,13 +87,13 @@ class _AnimatedWaterWaveProgressState extends State<AnimatedWaterWaveProgress>
       height: widget.height,
       child: AnimatedBuilder(
         animation: Listenable.merge([_animationController, _progressAnimation]),
-        builder: (context, child) {
-          return CustomPaint(
+        builder: (context, child) {          return CustomPaint(
             painter: WaterWavePainter(
               animationValue: _animationController.value,
               progress: _progressAnimation.value,
               waveColor: widget.waveColor,
               backgroundColor: widget.backgroundColor,
+              isCircular: widget.isCircular,
             ),
             child: widget.centerText != null
                 ? Center(
@@ -117,14 +119,24 @@ class WaterWavePainter extends CustomPainter {
   final double progress;
   final Color waveColor;
   final Color backgroundColor;
+  final bool isCircular;
 
   WaterWavePainter({
     required this.animationValue,
     required this.progress,
     required this.waveColor,
     required this.backgroundColor,
+    required this.isCircular,
   });  @override
   void paint(Canvas canvas, Size size) {
+    if (isCircular) {
+      _paintCircularWave(canvas, size);
+    } else {
+      _paintRectangularWave(canvas, size);
+    }
+  }
+
+  void _paintCircularWave(Canvas canvas, Size size) {
     final center = Offset(size.width / 2, size.height / 2);
     final radius = size.width / 2;
 
@@ -132,38 +144,35 @@ class WaterWavePainter extends CustomPainter {
     final bgPaint = Paint()
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(center, radius, bgPaint);    // Create much smoother and more natural wave animation
+    canvas.drawCircle(center, radius, bgPaint);
+
+    // Create smooth wave animation for circular shape
     final waterLevel = size.height * (1 - progress);
 
     final path = Path();
     
     // Enhanced wave parameters for more natural look
     const baseWaveAmplitude = 6.0;
-    const waveFrequency1 = 0.02; // Main wave
-    const waveFrequency2 = 0.035; // Secondary wave
-    const waveFrequency3 = 0.055; // Tertiary wave for detail
+    const waveFrequency1 = 0.02;
+    const waveFrequency2 = 0.035;
+    const waveFrequency3 = 0.055;
     
-    // Create continuous smooth wave
     for (double i = 0; i <= size.width + 2; i += 1) {
       double waveHeight = 0;
       
       // Layer multiple sine waves for natural ocean-like movement
-      // Primary wave - slow and large
       waveHeight += baseWaveAmplitude * 0.6 * math.sin(
           (i * waveFrequency1) + (animationValue * 2.0 * math.pi)
       );
       
-      // Secondary wave - medium speed, opposite direction
       waveHeight += baseWaveAmplitude * 0.25 * math.sin(
           (i * waveFrequency2) - (animationValue * 2.8 * math.pi) + math.pi / 3
       );
       
-      // Tertiary wave - fast and small for surface detail
       waveHeight += baseWaveAmplitude * 0.15 * math.sin(
           (i * waveFrequency3) + (animationValue * 4.2 * math.pi) + math.pi / 6
       );
       
-      // Add subtle random variation for more realism
       waveHeight += baseWaveAmplitude * 0.1 * math.sin(
           (i * 0.08) + (animationValue * 1.5 * math.pi)
       );
@@ -177,79 +186,107 @@ class WaterWavePainter extends CustomPainter {
       }
     }
     
-    // Complete the water shape
     path.lineTo(size.width, size.height);
     path.lineTo(0, size.height);
     path.close();
 
-    // Clip to circle and draw water with gradient effect
+    // Clip to circle and draw water
     canvas.save();
     final clipPath = Path()..addOval(Rect.fromCircle(center: center, radius: radius - 1));
     canvas.clipPath(clipPath);
-      // Add subtle gradient to water for depth
-    final waterGradientShader = LinearGradient(
+    canvas.drawPath(path, Paint()..color = waveColor..style = PaintingStyle.fill);
+    canvas.restore();
+
+    // Draw circle border
+    final borderPaint = Paint()
+      ..color = waveColor.withOpacity(0.8)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    canvas.drawCircle(center, radius, borderPaint);
+
+    // Add inner highlight
+    final highlightPaint = Paint()
+      ..color = Colors.white.withOpacity(0.2)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+    canvas.drawCircle(center, radius - 3, highlightPaint);
+  }
+
+  void _paintRectangularWave(Canvas canvas, Size size) {
+    // Draw background
+    final bgPaint = Paint()
+      ..color = backgroundColor
+      ..style = PaintingStyle.fill;
+    final bgRect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      const Radius.circular(10),
+    );
+    canvas.drawRRect(bgRect, bgPaint);
+
+    // Create smooth wave for rectangular progress bar
+    final waterLevel = size.height * (1 - progress);
+    
+    if (progress <= 0) return;
+
+    final path = Path();
+    
+    // Smaller wave amplitude for progress bar
+    const baseWaveAmplitude = 2.0;
+    const waveFrequency1 = 0.04;
+    const waveFrequency2 = 0.07;
+    
+    for (double i = 0; i <= size.width; i += 0.5) {
+      double waveHeight = 0;
+      
+      // Subtle waves for progress bar
+      waveHeight += baseWaveAmplitude * 0.7 * math.sin(
+          (i * waveFrequency1) + (animationValue * 2.0 * math.pi)
+      );
+      
+      waveHeight += baseWaveAmplitude * 0.3 * math.sin(
+          (i * waveFrequency2) - (animationValue * 3.0 * math.pi) + math.pi / 4
+      );
+      
+      final y = (waterLevel + waveHeight).clamp(0.0, size.height);
+      
+      if (i == 0) {
+        path.moveTo(i, y);
+      } else {
+        path.lineTo(i, y);
+      }
+    }
+    
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+
+    // Clip to rounded rectangle and draw water
+    canvas.save();
+    final clipPath = Path()..addRRect(bgRect);
+    canvas.clipPath(clipPath);
+    
+    // Gradient water effect for progress bar
+    final waterGradient = LinearGradient(
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
       colors: [
         waveColor.withOpacity(0.7),
         waveColor,
-        waveColor.withOpacity(0.9),
       ],
-      stops: const [0.0, 0.5, 1.0],
-    ).createShader(Rect.fromLTWH(0, waterLevel, size.width, size.height - waterLevel));
+    );
     
-    final gradientPaint = Paint()..shader = waterGradientShader;
-    path.fillType = PathFillType.nonZero;
-    canvas.drawPath(path, gradientPaint);
+    final waterPaint = Paint()
+      ..shader = waterGradient.createShader(Rect.fromLTWH(0, 0, size.width, size.height))      ..style = PaintingStyle.fill;
     
-    // Add surface foam/bubbles effect near the water line
-    if (progress > 0.1) {
-      final foamPaint = Paint()
-        ..color = Colors.white.withOpacity(0.3)
-        ..style = PaintingStyle.fill;
-      
-      // Create small foam bubbles along the wave line
-      for (double i = 0; i <= size.width; i += 12) {
-        final bubbleOffset = 2.0 * math.sin((i * 0.1) + (animationValue * 3 * math.pi));
-        final bubbleY = waterLevel + bubbleOffset - 3;
-        
-        // Only draw bubbles within the circle
-        final distanceFromCenter = math.sqrt(
-            math.pow(i - center.dx, 2) + math.pow(bubbleY - center.dy, 2)
-        );
-        
-        if (distanceFromCenter < radius - 5) {
-          canvas.drawCircle(
-            Offset(i, bubbleY),
-            1.5 + (0.5 * math.sin((i * 0.2) + (animationValue * 2 * math.pi))),
-            foamPaint,
-          );
-        }
-      }
-    }
-    
+    canvas.drawPath(path, waterPaint);
     canvas.restore();
 
-    // Draw enhanced circle border with depth
+    // Draw border
     final borderPaint = Paint()
-      ..color = waveColor.withOpacity(0.9)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.5;
-    canvas.drawCircle(center, radius, borderPaint);
-
-    // Add inner rim highlight for 3D effect
-    final innerHighlightPaint = Paint()
-      ..color = Colors.white.withOpacity(0.4)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
-    canvas.drawCircle(center, radius - 2, innerHighlightPaint);
-    
-    // Add outer subtle shadow
-    final shadowPaint = Paint()
-      ..color = waveColor.withOpacity(0.2)
+      ..color = waveColor.withOpacity(0.6)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
-    canvas.drawCircle(center, radius + 1, shadowPaint);
+    canvas.drawRRect(bgRect, borderPaint);
   }
 
   @override

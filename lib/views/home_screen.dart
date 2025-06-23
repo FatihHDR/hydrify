@@ -74,14 +74,16 @@ class _HomeScreenState extends State<HomeScreen> {  @override
                 ],
               ),
             ),
-          );
-        },
+          );        },
       ),      floatingActionButton: Consumer<HomeViewModel>(
         builder: (context, viewModel, child) {
-          return FloatingActionButton(
-            onPressed: () => _showAddWaterDialog(context, viewModel),
-            backgroundColor: AppColors.waterBlue,
-            child: const Icon(Icons.add, color: Colors.white),
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 90), // Move above navbar
+            child: FloatingActionButton(
+              onPressed: () => _showAddWaterDialog(context, viewModel),
+              backgroundColor: AppColors.waterBlue,
+              child: const Icon(Icons.add, color: Colors.white),
+            ),
           );
         },
       ),
@@ -220,14 +222,14 @@ class _HomeScreenState extends State<HomeScreen> {  @override
                           fontSize: 16,
                         ),
                       ),
-                      const SizedBox(height: 12),
-                      // Animated Water Wave Progress
+                      const SizedBox(height: 12),                      // Animated Water Wave Progress
                       AnimatedWaterWaveProgress(
                         progress: progress,
                         width: 150,
                         height: 20,
                         waveColor: Colors.white.withOpacity(0.8),
                         backgroundColor: Colors.white.withOpacity(0.2),
+                        isCircular: false, // Use rectangular shape for progress bar
                       ),
                     ],
                   ),
