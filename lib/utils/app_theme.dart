@@ -160,16 +160,16 @@ class AppTheme {
             fontWeight: FontWeight.w600,
           ),
         ),
-      ),      cardTheme: CardThemeData(
+      ),      cardTheme: const CardThemeData(
         elevation: 0, // Flat cards
         color: AppColors.surface,
         shadowColor: Colors.transparent,
         shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(20)), // More rounded
+          borderRadius: BorderRadius.all(Radius.circular(20)), // More rounded
           side: BorderSide(color: AppColors.textLight, width: 0.5), // Subtle border
         ),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      ),      inputDecorationTheme: InputDecorationTheme(
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      ),inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: AppColors.surfaceVariant,
         border: OutlineInputBorder(
@@ -314,18 +314,22 @@ class AppTheme {
         foregroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
-      ),
-      elevatedButtonTheme: ElevatedButtonThemeData(
+      ),      elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.waterBlueDark,
           foregroundColor: Colors.white,
-          elevation: 2,
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          elevation: 0, // Flat design
+          shadowColor: Colors.transparent,
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          textStyle: GoogleFonts.montserrat(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
           ),
         ),
-      ),      cardTheme: const CardThemeData(
+      ),cardTheme: const CardThemeData(
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),

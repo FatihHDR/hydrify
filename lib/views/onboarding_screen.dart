@@ -53,50 +53,46 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _pageController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: AppColors.backgroundGradient,
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              _buildProgressIndicator(),
-              Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (index) => setState(() => _currentPage = index),
-                  children: [
-                    _buildWelcomePage(),
-                    _buildPersonalInfoPage(),
-                    _buildGoalsPage(),
-                    _buildNotificationsPage(),
-                    _buildCompletePage(),
-                  ],
-                ),
+      backgroundColor: AppColors.background,
+      body: SafeArea(
+        child: Column(
+          children: [
+            _buildProgressIndicator(),
+            Expanded(
+              child: PageView(
+                controller: _pageController,
+                onPageChanged: (index) => setState(() => _currentPage = index),
+                children: [
+                  _buildWelcomePage(),
+                  _buildPersonalInfoPage(),
+                  _buildGoalsPage(),
+                  _buildNotificationsPage(),
+                  _buildCompletePage(),
+                ],
               ),
-              _buildNavigationButtons(),
-            ],
-          ),
+            ),
+            _buildNavigationButtons(),
+          ],
         ),
       ),
     );
   }
-
   Widget _buildProgressIndicator() {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       child: Row(
         children: List.generate(5, (index) {
           return Expanded(
             child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 2),
-              height: 4,
+              margin: const EdgeInsets.symmetric(horizontal: 3),
+              height: 3,
               decoration: BoxDecoration(
-                color: index <= _currentPage ? AppColors.waterBlue : Colors.grey[300],
+                color: index <= _currentPage 
+                    ? AppColors.waterBlue 
+                    : AppColors.textLight.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -104,67 +100,97 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         }),
       ),
     );
-  }
-
-  Widget _buildWelcomePage() {
+  }  Widget _buildWelcomePage() {
     return Padding(
-      padding: const EdgeInsets.all(32),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          const Spacer(),
+          
+          // Modern minimalist icon
           Container(
-            width: 150,
-            height: 150,
+            width: 100,
+            height: 100,
             decoration: BoxDecoration(
-              color: AppColors.waterBlueLight.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(75),
+              gradient: AppColors.primaryGradient,
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.waterBlue.withOpacity(0.15),
+                  blurRadius: 20,
+                  offset: const Offset(0, 10),
+                ),
+              ],
             ),
             child: const Icon(
-              Icons.water_drop,
-              size: 80,
-              color: AppColors.waterBlue,
+              Icons.water_drop_rounded,
+              size: 50,
+              color: Colors.white,
             ),
           ),
-          const SizedBox(height: 32),
-          const Text(
-            'Welcome to Hydrify!',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
-            ),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
+          
+          const SizedBox(height: 40),
+          
+          // Clean typography
           Text(
-            'Your personal hydration companion that helps you stay healthy by tracking your daily water intake.',
-            style: TextStyle(
-              fontSize: 16,
-              color: AppColors.textSecondary,
-              height: 1.5,
+            'Welcome to Hydrify',
+            style: Theme.of(context).textTheme.displaySmall?.copyWith(
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w700,
+              fontSize: 32,
+              letterSpacing: -0.5,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 32),
-          _buildFeatureItem(Icons.track_changes, 'Track Water Intake'),
-          _buildFeatureItem(Icons.notifications, 'Smart Reminders'),
-          _buildFeatureItem(Icons.insights, 'Progress Insights'),
+          
+          const SizedBox(height: 16),
+            Text(
+            'Your personal hydration companion.\nStay healthy by tracking your daily water intake.',
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: AppColors.textSecondary,
+              fontSize: 16,
+              height: 1.6,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          
+          const SizedBox(height: 48),
+          
+          // Clean feature list
+          _buildMinimalFeatureItem(Icons.water_drop_outlined, 'Track your hydration'),
+          _buildMinimalFeatureItem(Icons.notifications_none, 'Smart reminders'),
+          _buildMinimalFeatureItem(Icons.trending_up, 'Progress insights'),
+          
+          const Spacer(),
         ],
       ),
     );
   }
 
-  Widget _buildFeatureItem(IconData icon, String title) {
+  Widget _buildMinimalFeatureItem(IconData icon, String title) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.waterBlue, size: 24),
+          Container(
+            width: 24,
+            height: 24,
+            decoration: BoxDecoration(
+              color: AppColors.waterBlue.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Icon(
+              icon,
+              size: 16,
+              color: AppColors.waterBlue,
+            ),
+          ),
           const SizedBox(width: 16),
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 16,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: AppColors.textSecondary,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -172,7 +198,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ),
     );
   }
-
   Widget _buildPersonalInfoPage() {
     return Padding(
       padding: const EdgeInsets.all(32),
