@@ -2,7 +2,149 @@ import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import '../utils/app_theme.dart';
 
-// 1. Animated Water Wave Progress Widget
+// 1. Simple Progress Wave Effect for Cards
+class ProgressWaveEffect extends StatefulWidget {
+  final double progress; // 0.0 to 1.0
+  final double width;
+  final double height;
+  final Color waveColor;
+  final Color backgroundColor;
+
+  const ProgressWaveEffect({
+    super.key,
+    required this.progress,
+    this.width = 200,
+    this.height = 20,
+    this.waveColor = AppColors.waterBlue,
+    this.backgroundColor = Colors.transparent,
+  });
+
+  @override
+  State<ProgressWaveEffect> createState() => _ProgressWaveEffectState();
+}
+
+class _ProgressWaveEffectState extends State<ProgressWaveEffect>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    _animationController = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: widget.width,
+      height: widget.height,
+      child: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return CustomPaint(
+            painter: ProgressWavePainter(
+              animationValue: _animationController.value,
+              progress: widget.progress,
+              waveColor: widget.waveColor,
+              backgroundColor: widget.backgroundColor,
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ProgressWavePainter extends CustomPainter {
+  final double animationValue;
+  final double progress;
+  final Color waveColor;
+  final Color backgroundColor;
+
+  ProgressWavePainter({
+    required this.animationValue,
+    required this.progress,
+    required this.waveColor,
+    required this.backgroundColor,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Draw background
+    if (backgroundColor != Colors.transparent) {
+      final bgPaint = Paint()
+        ..color = backgroundColor
+        ..style = PaintingStyle.fill;
+      final bgRect = RRect.fromRectAndRadius(
+        Rect.fromLTWH(0, 0, size.width, size.height),
+        const Radius.circular(10),
+      );
+      canvas.drawRRect(bgRect, bgPaint);
+    }
+
+    if (progress <= 0) return;
+
+    // Create subtle wave for progress
+    final progressWidth = size.width * progress;
+    
+    final path = Path();
+      // Enhanced wave amplitude for better visibility
+    const waveAmplitude = 2.5; // Increased from 1.5 to 2.5
+    const waveFrequency = 0.06;
+    
+    // Start from left
+    for (double x = 0; x <= progressWidth; x += 1) {
+      final waveHeight = waveAmplitude * math.sin(
+        (x * waveFrequency) + (animationValue * 2 * math.pi)
+      );
+      
+      final y = (size.height / 2) + waveHeight;
+      
+      if (x == 0) {
+        path.moveTo(x, y);
+      } else {
+        path.lineTo(x, y);
+      }
+    }
+    
+    // Complete the filled area
+    path.lineTo(progressWidth, size.height);
+    path.lineTo(0, size.height);
+    path.close();    // Draw the wave with better visibility
+    final wavePaint = Paint()
+      ..color = waveColor.withOpacity(0.4) // Increased from 0.15 to 0.4
+      ..style = PaintingStyle.fill;
+    
+    canvas.drawPath(path, wavePaint);
+
+    // Add a subtle border
+    final borderPaint = Paint()
+      ..color = waveColor.withOpacity(0.5) // Increased from 0.25 to 0.5
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+    
+    final borderRect = RRect.fromRectAndRadius(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      const Radius.circular(10),
+    );
+    canvas.drawRRect(borderRect, borderPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
+}
+
+// 2. Animated Water Wave Progress Widget (keeping the original for other uses)
 class AnimatedWaterWaveProgress extends StatefulWidget {
   final double progress; // 0.0 to 1.0
   final double width;

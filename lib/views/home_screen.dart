@@ -102,9 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {  @override
       greeting = 'Good evening';
     }    return Card(
       elevation: 3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Container(
-        padding: const EdgeInsets.all(20),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),            child: Container(
+              padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           gradient: LinearGradient(
@@ -170,74 +169,102 @@ class _HomeScreenState extends State<HomeScreen> {  @override
     final progress = viewModel.userProfile!.dailyGoal > 0 
         ? (viewModel.todayTotal / viewModel.userProfile!.dailyGoal).clamp(0.0, 1.0) 
         : 0.0;
-    final percentage = (progress * 100).round();
-
-    return Card(
+    final percentage = (progress * 100).round();    return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16),
-          gradient: AppColors.primaryGradient,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [          const LocalizedText(
-            'todays_progress',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
+      child: Stack(
+        children: [
+          // Background wave effect with low opacity
+          Positioned.fill(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: ProgressWaveEffect(
+                progress: progress,
+                width: double.infinity,
+                height: double.infinity,
+                waveColor: Colors.white,
+                backgroundColor: Colors.transparent,
+              ),
             ),
           ),
-            const SizedBox(height: 20),            Row(
+          // Main content
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: AppColors.primaryGradient,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 3D Bottle Visualization
-                Bottle3DVisualization(
-                  fillPercentage: progress,
-                  width: 80,
-                  height: 120,
-                  bottleColor: Colors.white.withOpacity(0.7),
-                  waterColor: Colors.white,
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${(viewModel.todayTotal / 1000).toStringAsFixed(1)}L / ${(viewModel.userProfile!.dailyGoal / 1000).toStringAsFixed(1)}L',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        '$percentage% completed',
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.9),
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(height: 12),                      // Animated Water Wave Progress
-                      AnimatedWaterWaveProgress(
-                        progress: progress,
-                        width: 150,
-                        height: 20,
-                        waveColor: Colors.white.withOpacity(0.8),
-                        backgroundColor: Colors.white.withOpacity(0.2),
-                        isCircular: false, // Use rectangular shape for progress bar
-                      ),
-                    ],
+                const LocalizedText(
+                  'todays_progress',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                   ),
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    // 3D Bottle Visualization
+                    Bottle3DVisualization(
+                      fillPercentage: progress,
+                      width: 80,
+                      height: 120,
+                      bottleColor: Colors.white.withOpacity(0.7),
+                      waterColor: Colors.white,
+                    ),
+                    const SizedBox(width: 20),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${(viewModel.todayTotal / 1000).toStringAsFixed(1)}L / ${(viewModel.userProfile!.dailyGoal / 1000).toStringAsFixed(1)}L',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            '$percentage% completed',
+                            style: TextStyle(
+                              color: Colors.white.withOpacity(0.9),
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 12),                          // Simple progress bar
+                          Container(
+                            width: 150,
+                            height: 8,
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: FractionallySizedBox(
+                              alignment: Alignment.centerLeft,
+                              widthFactor: progress,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
