@@ -107,6 +107,32 @@ class DebugScreen extends StatelessWidget {
               child: const Text('Add Water & Check Achievements'),
             ),
             
+            const SizedBox(height: 8),
+            
+            // Test Analytics Button
+            ElevatedButton(
+              onPressed: () async {
+                final homeVM = Provider.of<HomeViewModel>(context, listen: false);
+                
+                // Add multiple water intake entries to generate analytics data
+                final amounts = [250, 300, 200, 400, 250, 350, 300];
+                for (int i = 0; i < amounts.length; i++) {
+                  await homeVM.addWaterIntake(amounts[i]);
+                  // Add a small delay to create different timestamps
+                  await Future.delayed(const Duration(milliseconds: 100));
+                }
+                
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Added ${amounts.length} water intake entries for analytics testing')),
+                );
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.success,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Add Sample Data for Analytics'),
+            ),
+            
             const SizedBox(height: 16),
             
             // Analytics Screen Button

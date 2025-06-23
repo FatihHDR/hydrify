@@ -1,53 +1,66 @@
+import 'package:flutter/foundation.dart';
 import '../models/analytics_model.dart';
 import '../models/water_intake_model.dart';
 import 'database_service.dart';
 
 class AnalyticsService {
   final DatabaseService _databaseService = DatabaseService();
-
   Future<AnalyticsData> generateAnalytics({
     int? days,
     DateTime? startDate,
     DateTime? endDate,
     int? dailyGoal,
   }) async {
-    final now = DateTime.now();
-    final analysisStartDate = startDate ?? now.subtract(Duration(days: days ?? 30));
-    final analysisEndDate = endDate ?? now;
-    final userDailyGoal = dailyGoal ?? 2000;
+    try {
+      final now = DateTime.now();
+      final analysisStartDate = startDate ?? now.subtract(Duration(days: days ?? 30));
+      final analysisEndDate = endDate ?? now;
+      final userDailyGoal = dailyGoal ?? 2000;
 
-    // Get all water intake data for the period
-    final allIntakes = await _getIntakesForPeriod(analysisStartDate, analysisEndDate);
-    
-    // Calculate basic statistics
-    final dailyStats = await _calculateDailyStats(allIntakes, userDailyGoal);
-    final weeklyStats = _calculateWeeklyStats(dailyStats);
-    final monthlyStats = _calculateMonthlyStats(dailyStats);
-    final hourlyPatterns = _calculateHourlyPatterns(allIntakes);
-    final weekdayPatterns = _calculateWeekdayPatterns(allIntakes);
-    final streakInfo = _calculateStreakInfo(dailyStats);
+      debugPrint('Analytics: Starting analysis from $analysisStartDate to $analysisEndDate');
 
-    // Calculate summary statistics
-    final totalIntake = allIntakes.fold(0, (sum, intake) => sum + intake.amount);
-    final totalDays = dailyStats.length;
-    final goalReachedDays = dailyStats.where((day) => day.goalReached).length;
-    final averageDailyIntake = totalDays > 0 ? totalIntake / totalDays : 0.0;
-    final goalCompletionRate = totalDays > 0 ? goalReachedDays / totalDays : 0.0;
+      // Get all water intake data for the period
+      final allIntakes = await _getIntakesForPeriod(analysisStartDate, analysisEndDate);
+      debugPrint('Analytics: Found ${allIntakes.length} water intake records');
+      
+      // Calculate basic statistics
+      final dailyStats = await _calculateDailyStats(allIntakes, userDailyGoal);
+      debugPrint('Analytics: Calculated stats for ${dailyStats.length} days');
+      
+      final weeklyStats = _calculateWeeklyStats(dailyStats);
+      final monthlyStats = _calculateMonthlyStats(dailyStats);
+      final hourlyPatterns = _calculateHourlyPatterns(allIntakes);
+      final weekdayPatterns = _calculateWeekdayPatterns(allIntakes);
+      final streakInfo = _calculateStreakInfo(dailyStats);
 
-    return AnalyticsData(
-      averageDailyIntake: averageDailyIntake,
-      totalDays: totalDays,
-      goalReachedDays: goalReachedDays,
-      goalCompletionRate: goalCompletionRate,
-      currentStreak: streakInfo.currentStreak,
-      longestStreak: streakInfo.longestStreak,
-      totalIntake: totalIntake,
-      weeklyStats: weeklyStats,
-      monthlyStats: monthlyStats,
-      hourlyPatterns: hourlyPatterns,
-      weekdayPatterns: weekdayPatterns,
-      streakInfo: streakInfo,
-    );
+      // Calculate summary statistics
+      final totalIntake = allIntakes.fold(0, (sum, intake) => sum + intake.amount);
+      final totalDays = dailyStats.length;
+      final goalReachedDays = dailyStats.where((day) => day.goalReached).length;
+      final averageDailyIntake = totalDays > 0 ? totalIntake / totalDays : 0.0;
+      final goalCompletionRate = totalDays > 0 ? goalReachedDays / totalDays : 0.0;
+
+      debugPrint('Analytics: Generated analytics successfully');
+
+      return AnalyticsData(
+        averageDailyIntake: averageDailyIntake,
+        totalDays: totalDays,
+        goalReachedDays: goalReachedDays,
+        goalCompletionRate: goalCompletionRate,
+        currentStreak: streakInfo.currentStreak,
+        longestStreak: streakInfo.longestStreak,
+        totalIntake: totalIntake,
+        weeklyStats: weeklyStats,
+        monthlyStats: monthlyStats,
+        hourlyPatterns: hourlyPatterns,
+        weekdayPatterns: weekdayPatterns,
+        streakInfo: streakInfo,
+      );
+    } catch (e, stackTrace) {
+      debugPrint('Analytics service error: $e');
+      debugPrint('Stack trace: $stackTrace');
+      rethrow;
+    }
   }
 
   Future<List<ComparisonData>> generateComparisonData(int dailyGoal) async {
@@ -209,19 +222,17 @@ class AnalyticsService {
     }
 
     return allIntakes;
-  }
-
-  Future<List<DailyStats>> _calculateDailyStats(List<WaterIntakeModel> intakes, int dailyGoal) async {
-    final dailyMap = <String, List<WaterIntakeModel>>{};
+  }  Future<List<DailyStats>> _calculateDailyStats(List<WaterIntakeModel> intakes, int dailyGoal) async {
+    final dailyMap = <DateTime, List<WaterIntakeModel>>{};
     
     for (final intake in intakes) {
-      final dateKey = '${intake.date.year}-${intake.date.month}-${intake.date.day}';
+      final dateKey = DateTime(intake.date.year, intake.date.month, intake.date.day);
       dailyMap[dateKey] ??= [];
       dailyMap[dateKey]!.add(intake);
     }
 
     return dailyMap.entries.map((entry) {
-      final date = DateTime.parse('${entry.key} 00:00:00');
+      final date = entry.key;
       final dayIntakes = entry.value;
       final totalIntake = dayIntakes.fold(0, (sum, intake) => sum + intake.amount);
       final goalReached = totalIntake >= dailyGoal;

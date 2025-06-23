@@ -110,12 +110,17 @@ class AnalyticsViewModel extends ChangeNotifier {
       // Generate insights
       if (_analyticsData != null) {
         _insights = await _analyticsService.generateInsights(_analyticsData!, goal);
+      }      _error = null;
+    } catch (e, stackTrace) {
+      if (e.toString().contains('FormatException')) {
+        _error = 'Data format error. Please check your water intake records.';
+      } else if (e.toString().contains('database')) {
+        _error = 'Database error. Please try refreshing the data.';
+      } else {
+        _error = 'Failed to load analytics: ${e.toString()}';
       }
-
-      _error = null;
-    } catch (e) {
-      _error = 'Failed to load analytics: ${e.toString()}';
       debugPrint('Analytics loading error: $e');
+      debugPrint('Stack trace: $stackTrace');
     } finally {
       _isLoading = false;
       notifyListeners();
