@@ -136,10 +136,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                   position: _navBarAnimation,
                   child: FloatingBottomNavBar(
                     currentIndex: _currentIndex,
-                    onTap: _onTabTapped,
-                    items: const [
+                    onTap: _onTabTapped,                    items: const [
                       FloatingNavItem(icon: Icons.home, label: 'Home'),
                       FloatingNavItem(icon: Icons.history, label: 'History'),
+                      FloatingNavItem(icon: Icons.analytics, label: 'Analytics'),
                       FloatingNavItem(icon: Icons.emoji_events, label: 'Achievements'),
                       FloatingNavItem(icon: Icons.person, label: 'Profile'),
                     ],
