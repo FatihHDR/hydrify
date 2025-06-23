@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class AppColors {  // Modern minimalist color palette
+class AppColors {
+  // Modern minimalist color palette
   static const Color primary = Color(0xFF2563EB); // Modern blue
   static const Color primaryDark = Color(0xFF1D4ED8);
   static const Color secondary = Color(0xFF10B981); // Modern green
@@ -12,7 +13,8 @@ class AppColors {  // Modern minimalist color palette
   static const Color waterBlue = Color(0xFF3B82F6); // Clean blue
   static const Color waterBlueDark = Color(0xFF2563EB);
   static const Color waterBlueLight = Color(0xFFDBEAFE);
-    // Modern neutral backgrounds
+  
+  // Light theme colors
   static const Color background = Color(0xFFFAFAFA); // Softer white
   static const Color surface = Color(0xFFFFFFFF);
   static const Color surfaceVariant = Color(0xFFF8FAFC); // Very light gray
@@ -21,6 +23,16 @@ class AppColors {  // Modern minimalist color palette
   static const Color textPrimary = Color(0xFF111827); // Near black
   static const Color textSecondary = Color(0xFF6B7280); // Professional gray
   static const Color textLight = Color(0xFF9CA3AF); // Light gray
+  
+  // Dark theme colors
+  static const Color backgroundDark = Color(0xFF0F172A); // Dark slate
+  static const Color surfaceDark = Color(0xFF1E293B); // Slate 800
+  static const Color surfaceVariantDark = Color(0xFF334155); // Slate 700
+  
+  // Dark theme text colors
+  static const Color textPrimaryDark = Color(0xFFF8FAFC); // Light slate
+  static const Color textSecondaryDark = Color(0xFFCBD5E1); // Slate 300
+  static const Color textLightDark = Color(0xFF94A3B8); // Slate 400
     // Status colors - modern and subtle
   static const Color success = Color(0xFF10B981); // Modern green
   static const Color warning = Color(0xFFF59E0B); // Modern amber
@@ -230,101 +242,100 @@ class AppTheme {
       ),
     );
   }
-    static ThemeData get darkTheme {
+  static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
+      brightness: Brightness.dark,
       fontFamily: GoogleFonts.montserrat().fontFamily,
+      scaffoldBackgroundColor: AppColors.backgroundDark,
       textTheme: GoogleFonts.montserratTextTheme(ThemeData.dark().textTheme).copyWith(
         displayLarge: GoogleFonts.montserrat(
           fontSize: 32,
           fontWeight: FontWeight.bold,
-          color: Colors.white,
+          color: AppColors.textPrimaryDark,
         ),
         displayMedium: GoogleFonts.montserrat(
           fontSize: 28,
           fontWeight: FontWeight.bold,
-          color: Colors.white,
+          color: AppColors.textPrimaryDark,
         ),
         displaySmall: GoogleFonts.montserrat(
           fontSize: 24,
           fontWeight: FontWeight.w600,
-          color: Colors.white,
+          color: AppColors.textPrimaryDark,
         ),
         headlineLarge: GoogleFonts.montserrat(
           fontSize: 22,
           fontWeight: FontWeight.w600,
-          color: Colors.white,
+          color: AppColors.textPrimaryDark,
         ),
         headlineMedium: GoogleFonts.montserrat(
           fontSize: 20,
           fontWeight: FontWeight.w500,
-          color: Colors.white,
+          color: AppColors.textPrimaryDark,
         ),
         headlineSmall: GoogleFonts.montserrat(
           fontSize: 18,
           fontWeight: FontWeight.w500,
-          color: Colors.white,
+          color: AppColors.textPrimaryDark,
         ),
         titleLarge: GoogleFonts.montserrat(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: Colors.white,
+          color: AppColors.textPrimaryDark,
         ),
         titleMedium: GoogleFonts.montserrat(
           fontSize: 14,
           fontWeight: FontWeight.w500,
-          color: Colors.white,
+          color: AppColors.textPrimaryDark,
         ),
         titleSmall: GoogleFonts.montserrat(
           fontSize: 12,
           fontWeight: FontWeight.w500,
-          color: Colors.white70,
+          color: AppColors.textSecondaryDark,
         ),
         bodyLarge: GoogleFonts.montserrat(
           fontSize: 16,
           fontWeight: FontWeight.normal,
-          color: Colors.white,
+          color: AppColors.textPrimaryDark,
         ),
         bodyMedium: GoogleFonts.montserrat(
           fontSize: 14,
           fontWeight: FontWeight.normal,
-          color: Colors.white,
+          color: AppColors.textPrimaryDark,
         ),
         bodySmall: GoogleFonts.montserrat(
           fontSize: 12,
           fontWeight: FontWeight.normal,
-          color: Colors.white70,
+          color: AppColors.textSecondaryDark,
         ),
         labelLarge: GoogleFonts.montserrat(
           fontSize: 14,
           fontWeight: FontWeight.w500,
-          color: Colors.white,
+          color: AppColors.textPrimaryDark,
         ),
         labelMedium: GoogleFonts.montserrat(
           fontSize: 12,
           fontWeight: FontWeight.w500,
-          color: Colors.white70,
+          color: AppColors.textSecondaryDark,
         ),
         labelSmall: GoogleFonts.montserrat(
           fontSize: 10,
           fontWeight: FontWeight.w500,
-          color: Colors.white70,
+          color: AppColors.textSecondaryDark,
         ),
       ),
       colorScheme: ColorScheme.fromSeed(
         seedColor: AppColors.primary,
         brightness: Brightness.dark,
+        surface: AppColors.surfaceDark,
+        background: AppColors.backgroundDark,
       ),
-      appBarTheme: const AppBarTheme(
-        backgroundColor: AppColors.waterBlueDark,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        centerTitle: true,
-      ),      elevatedButtonTheme: ElevatedButtonThemeData(
+      elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.waterBlueDark,
+          backgroundColor: AppColors.waterBlue,
           foregroundColor: Colors.white,
-          elevation: 0, // Flat design
+          elevation: 0,
           shadowColor: Colors.transparent,
           padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
           shape: RoundedRectangleBorder(
@@ -335,25 +346,84 @@ class AppTheme {
             fontWeight: FontWeight.w600,
           ),
         ),
-      ),cardTheme: const CardThemeData(
-        elevation: 2,
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: AppColors.waterBlue,
+          side: const BorderSide(color: AppColors.waterBlue, width: 1.5),
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          textStyle: GoogleFonts.montserrat(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      cardTheme: const CardThemeData(
+        elevation: 0,
+        color: AppColors.surfaceDark,
+        shadowColor: Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          side: BorderSide(color: AppColors.surfaceVariantDark, width: 0.5),
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: AppColors.surfaceVariantDark,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: AppColors.waterBlue, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: AppColors.error, width: 1),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        labelStyle: GoogleFonts.montserrat(
+          color: AppColors.textSecondaryDark,
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+        ),
+        hintStyle: GoogleFonts.montserrat(
+          color: AppColors.textLightDark,
+          fontSize: 16,
+        ),
+      ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: AppColors.waterBlue,
+        foregroundColor: Colors.white,
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
       ),
-      inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+      appBarTheme: AppBarTheme(
+        backgroundColor: AppColors.surfaceDark,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        centerTitle: false,
+        titleTextStyle: GoogleFonts.montserrat(
+          color: AppColors.textPrimaryDark,
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.waterBlue),
+        iconTheme: const IconThemeData(
+          color: AppColors.textPrimaryDark,
+          size: 24,
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      ),
-      floatingActionButtonTheme: const FloatingActionButtonThemeData(
-        backgroundColor: AppColors.waterBlueDark,
-        foregroundColor: Colors.white,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
       ),
     );
   }

@@ -11,6 +11,7 @@ import 'viewmodels/auth_viewmodel.dart';
 import 'viewmodels/achievement_viewmodel.dart';
 import 'views/splash_screen.dart';
 import 'utils/app_theme.dart';
+import 'utils/theme_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,22 +29,29 @@ void main() async {
 
 class HydrifyApp extends StatelessWidget {
   const HydrifyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(      providers: [
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeManager()),
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
         ChangeNotifierProvider(create: (_) => HistoryViewModel()),
         ChangeNotifierProvider(create: (_) => AchievementViewModel()),
       ],
-      child: MaterialApp(
-        title: 'Hydrify',
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.system,
-        home: const SplashScreen(),
-        debugShowCheckedModeBanner: false,
+      child: Consumer<ThemeManager>(
+        builder: (context, themeManager, child) {
+          return MaterialApp(
+            title: 'Hydrify',
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeManager.themeMode,
+            home: const SplashScreen(),
+            debugShowCheckedModeBanner: false,
+          );
+        },
       ),
     );
   }
