@@ -33,6 +33,12 @@ class AppColors {  // Modern minimalist color palette
     colors: [Color(0xFF3B82F6), Color(0xFF1D4ED8)],
   );
   
+  static const LinearGradient successGradient = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF10B981), Color(0xFF059669)],
+  );
+  
   static const LinearGradient subtleGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
