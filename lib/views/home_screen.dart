@@ -173,26 +173,23 @@ class _HomeScreenState extends State<HomeScreen> {  @override
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Stack(
-        children: [
-          // Background wave effect with low opacity
+        children: [              // Wave effect now spans full card width with high visibility
           Positioned.fill(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: ProgressWaveEffect(
+              borderRadius: BorderRadius.circular(16),              child: ProgressWaveEffect(
                 progress: progress,
                 width: double.infinity,
                 height: double.infinity,
-                waveColor: Colors.white,
+                waveColor: Colors.blue, // Bright blue for testing
                 backgroundColor: Colors.transparent,
               ),
-            ),
-          ),
+            ),          ),
           // Main content
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              gradient: AppColors.primaryGradient,
+              color: AppColors.waterBlue.withOpacity(0.8), // Semi-transparent solid color instead of gradient
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

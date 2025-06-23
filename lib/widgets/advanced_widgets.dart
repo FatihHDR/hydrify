@@ -77,9 +77,10 @@ class ProgressWavePainter extends CustomPainter {
     required this.waveColor,
     required this.backgroundColor,
   });
-
   @override
   void paint(Canvas canvas, Size size) {
+    print("Drawing wave effect: size=${size.width}x${size.height}, progress=$progress");
+    
     // Draw background
     if (backgroundColor != Colors.transparent) {
       final bgPaint = Paint()
@@ -90,17 +91,12 @@ class ProgressWavePainter extends CustomPainter {
         const Radius.circular(10),
       );
       canvas.drawRRect(bgRect, bgPaint);
-    }
-
-    if (progress <= 0) return;
-
-    // Create subtle wave for progress
-    final progressWidth = size.width * progress;
+    }    // Always show wave effect for visibility
+    final progressWidth = size.width; // Use full width instead of progress-based width
     
-    final path = Path();
-      // Enhanced wave amplitude for better visibility
-    const waveAmplitude = 2.5; // Increased from 1.5 to 2.5
-    const waveFrequency = 0.06;
+    final path = Path();    // Enhanced wave amplitude for maximum visibility
+    const waveAmplitude = 15.0; // Much larger amplitude for visibility
+    const waveFrequency = 0.02; // Lower frequency for smoother waves
     
     // Start from left
     for (double x = 0; x <= progressWidth; x += 1) {
@@ -108,7 +104,7 @@ class ProgressWavePainter extends CustomPainter {
         (x * waveFrequency) + (animationValue * 2 * math.pi)
       );
       
-      final y = (size.height / 2) + waveHeight;
+      final y = (size.height * 0.3) + waveHeight; // Position wave at 30% height instead of center
       
       if (x == 0) {
         path.moveTo(x, y);
@@ -120,18 +116,18 @@ class ProgressWavePainter extends CustomPainter {
     // Complete the filled area
     path.lineTo(progressWidth, size.height);
     path.lineTo(0, size.height);
-    path.close();    // Draw the wave with better visibility
+    path.close();    // Draw the wave with high visibility
     final wavePaint = Paint()
-      ..color = waveColor.withOpacity(0.4) // Increased from 0.15 to 0.4
+      ..color = waveColor.withOpacity(1.0) // Full opacity since color already has opacity
       ..style = PaintingStyle.fill;
     
     canvas.drawPath(path, wavePaint);
 
-    // Add a subtle border
+    // Add a more visible border
     final borderPaint = Paint()
-      ..color = waveColor.withOpacity(0.5) // Increased from 0.25 to 0.5
+      ..color = waveColor.withOpacity(1.0) // Full opacity
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1;
+      ..strokeWidth = 2; // Increased from 1 to 2
     
     final borderRect = RRect.fromRectAndRadius(
       Rect.fromLTWH(0, 0, size.width, size.height),
