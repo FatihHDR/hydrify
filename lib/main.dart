@@ -8,6 +8,7 @@ import 'viewmodels/home_viewmodel.dart';
 import 'viewmodels/profile_viewmodel.dart';
 import 'viewmodels/history_viewmodel.dart';
 import 'viewmodels/auth_viewmodel.dart';
+import 'viewmodels/achievement_viewmodel.dart';
 import 'views/splash_screen.dart';
 import 'utils/app_theme.dart';
 
@@ -29,12 +30,12 @@ class HydrifyApp extends StatelessWidget {
   const HydrifyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
+    return MultiProvider(      providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => ProfileViewModel()),
         ChangeNotifierProvider(create: (_) => HistoryViewModel()),
+        ChangeNotifierProvider(create: (_) => AchievementViewModel()),
       ],
       child: MaterialApp(
         title: 'Hydrify',

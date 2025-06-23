@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import '../models/water_intake_model.dart';
 import '../models/user_profile_model.dart';
+import '../models/achievement_model.dart';
 
 class DatabaseService {
   static final DatabaseService _instance = DatabaseService._internal();
@@ -47,6 +48,20 @@ class DatabaseService {
         notificationInterval INTEGER NOT NULL,
         startTime TEXT NOT NULL,
         endTime TEXT NOT NULL
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE achievements (
+        id TEXT PRIMARY KEY,
+        title TEXT NOT NULL,
+        description TEXT NOT NULL,
+        icon INTEGER NOT NULL,
+        requiredValue INTEGER NOT NULL,
+        isUnlocked INTEGER NOT NULL,
+        unlockedDate TEXT,
+        type INTEGER NOT NULL,
+        color INTEGER NOT NULL
       )
     ''');
   }
@@ -158,5 +173,131 @@ class DatabaseService {
     ''', [sevenDaysAgo.toIso8601String()]);
 
     return result;
+  }
+
+  // Achievement CRUD operations
+  Future<int> insertAchievement(Achievement achievement) async {
+    final db = await database;
+    return await db.insert('achievements', achievement.toMap());
+  }
+
+  Future<List<Achievement>> getAchievements() async {
+    final db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('achievements');
+    return maps.map((map) => Achievement.fromMap(map)).toList();
+  }
+
+  Future<int> updateAchievement(Achievement achievement) async {
+    final db = await database;
+    return await db.update(
+      'achievements',
+      achievement.toMap(),
+      where: 'id = ?',
+      whereArgs: [achievement.id],
+    );
+  }
+
+  Future<int> deleteAchievement(String id) async {
+    final db = await database;
+    return await db.delete(
+      'achievements',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  Future<int> getEarlyMorningDaysCount() async {
+    final db = await database;
+    final sevenDaysAgo = DateTime.now().subtract(const Duration(days: 30));
+    
+    final List<Map<String, dynamic>> result = await db.rawQuery('''
+      SELECT COUNT(DISTINCT DATE(timestamp)) as count
+      FROM water_intake 
+      WHERE timestamp >= ? 
+      AND TIME(timestamp) <= '08:00:00'
+    ''', [sevenDaysAgo.toIso8601String()]);
+
+    return result.first['count'] ?? 0;
+  }
+
+  Future<int> getLateNightDaysCount() async {
+    final db = await database;
+    final thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30));
+    
+    final List<Map<String, dynamic>> result = await db.rawQuery('''
+      SELECT COUNT(DISTINCT DATE(timestamp)) as count
+      FROM water_intake 
+      WHERE timestamp >= ? 
+      AND TIME(timestamp) >= '22:00:00'
+    ''', [thirtyDaysAgo.toIso8601String()]);
+
+    return result.first['count'] ?? 0;
+  }
+
+  Future<int> getTotalLifetimeIntake() async {
+    final db = await database;
+    final List<Map<String, dynamic>> result = await db.rawQuery('''
+      SELECT SUM(amount) as total
+      FROM water_intake
+    ''');
+    
+    return result.first['total'] ?? 0;
+  }
+
+  Future<int> getDailyGoalsReachedCount() async {
+    final db = await database;
+    
+    // Get user's daily goal
+    final profile = await getUserProfile();
+    if (profile == null) return 0;
+    
+    final List<Map<String, dynamic>> result = await db.rawQuery('''
+      SELECT COUNT(*) as count
+      FROM (
+        SELECT DATE(timestamp) as date, SUM(amount) as daily_total
+        FROM water_intake
+        GROUP BY DATE(timestamp)
+        HAVING daily_total >= ?
+      )
+    ''', [profile.dailyGoal]);
+    
+    return result.first['count'] ?? 0;
+  }
+
+  Future<int> getCurrentStreak() async {
+    final db = await database;
+    
+    // Get user's daily goal
+    final profile = await getUserProfile();
+    if (profile == null) return 0;
+    
+    final List<Map<String, dynamic>> result = await db.rawQuery('''
+      SELECT DATE(timestamp) as date, SUM(amount) as daily_total
+      FROM water_intake
+      GROUP BY DATE(timestamp)
+      ORDER BY date DESC
+    ''');
+    
+    int streak = 0;
+    DateTime currentDate = DateTime.now();
+    
+    for (final row in result) {
+      final dateStr = row['date'] as String;
+      final date = DateTime.parse(dateStr);
+      final dailyTotal = row['daily_total'] as int;
+      
+      if (dailyTotal >= profile.dailyGoal) {
+        final daysDiff = currentDate.difference(date).inDays;
+        if (daysDiff == streak) {
+          streak++;
+        } else {
+          break;
+        }
+      } else {
+        break;
+      }
+    }
+    
+    return streak;
   }
 }

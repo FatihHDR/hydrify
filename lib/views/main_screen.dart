@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../utils/app_theme.dart';
 import 'home_screen.dart';
 import 'history_screen.dart';
+import 'achievement_screen.dart';
 import 'profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -13,10 +14,10 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  
-  final List<Widget> _screens = [
+    final List<Widget> _screens = [
     const HomeScreen(),
     const HistoryScreen(),
+    const AchievementScreen(),
     const ProfileScreen(),
   ];
 
@@ -29,8 +30,7 @@ class _MainScreenState extends State<MainScreen> {
         onTap: (index) => setState(() => _currentIndex = index),
         type: BottomNavigationBarType.fixed,
         selectedItemColor: AppColors.waterBlue,
-        unselectedItemColor: AppColors.textLight,
-        items: const [
+        unselectedItemColor: AppColors.textLight,        items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
@@ -38,6 +38,10 @@ class _MainScreenState extends State<MainScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.history),
             label: 'History',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.emoji_events),
+            label: 'Achievements',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
