@@ -31,12 +31,12 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,      appBar: AppBar(
+  Widget build(BuildContext context) {    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
         title: const Text('Achievements'),
-        backgroundColor: AppColors.waterBlue,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
         elevation: 0,
         actions: [
           // Debug button to refresh achievements
@@ -46,12 +46,11 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
               Provider.of<AchievementViewModel>(context, listen: false).refreshAchievements();
             },
           ),
-        ],
-        bottom: TabBar(
+        ],        bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
+          indicatorColor: Theme.of(context).primaryColor,
+          labelColor: Theme.of(context).textTheme.bodyLarge?.color,
+          unselectedLabelColor: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
           tabs: const [
             Tab(text: 'All'),
             Tab(text: 'Unlocked'),

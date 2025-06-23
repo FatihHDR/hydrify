@@ -5,6 +5,7 @@ import '../viewmodels/auth_viewmodel.dart';
 import '../models/user_profile_model.dart';
 import '../utils/app_theme.dart';
 import '../utils/helpers.dart';
+import '../utils/theme_manager.dart';
 import '../widgets/common_widgets.dart';
 import 'login_screen.dart';
 import 'debug_screen.dart';
@@ -53,14 +54,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
+  Widget build(BuildContext context) {    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Profile'),
-        backgroundColor: AppColors.waterBlue,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
         elevation: 0,        actions: [
+          // Dark mode toggle button
+          Consumer<ThemeManager>(
+            builder: (context, themeManager, child) {
+              return IconButton(
+                icon: Icon(
+                  themeManager.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+                ),
+                onPressed: () {
+                  themeManager.toggleTheme();
+                },
+                tooltip: themeManager.isDarkMode ? 'Light Mode' : 'Dark Mode',
+              );
+            },
+          ),
           // Debug button
           IconButton(
             icon: const Icon(Icons.bug_report),
@@ -72,13 +86,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
           ),
           Consumer<ProfileViewModel>(
-            builder: (context, viewModel, child) {
-              return TextButton(
+            builder: (context, viewModel, child) {              return TextButton(
                 onPressed: viewModel.isSaving ? null : _saveProfile,
                 child: Text(
                   'Save',
                   style: TextStyle(
-                    color: viewModel.isSaving ? Colors.white54 : Colors.white,
+                    color: viewModel.isSaving 
+                        ? Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.5)
+                        : Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

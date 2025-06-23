@@ -24,13 +24,11 @@ class _HomeScreenState extends State<HomeScreen> {  @override
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
+  Widget build(BuildContext context) {    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,appBar: AppBar(
         title: const Text('Hydrify'),
-        backgroundColor: AppColors.waterBlue,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
         elevation: 0,
         actions: [
           IconButton(

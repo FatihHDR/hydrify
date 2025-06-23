@@ -32,19 +32,17 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
+  Widget build(BuildContext context) {    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('History & Stats'),
-        backgroundColor: AppColors.waterBlue,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        bottom: TabBar(
+        backgroundColor: Colors.transparent,
+        foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
+        elevation: 0,        bottom: TabBar(
           controller: _tabController,
-          indicatorColor: Colors.white,
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white70,
+          indicatorColor: Theme.of(context).primaryColor,
+          labelColor: Theme.of(context).textTheme.bodyLarge?.color,
+          unselectedLabelColor: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
           tabs: const [
             Tab(text: 'Chart', icon: Icon(Icons.bar_chart)),
             Tab(text: 'History', icon: Icon(Icons.list)),
