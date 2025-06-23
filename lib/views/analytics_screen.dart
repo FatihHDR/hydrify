@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/analytics_viewmodel.dart';
 import '../widgets/analytics_widgets.dart';
+import '../models/analytics_model.dart';
 import '../utils/app_theme.dart';
 
 class AnalyticsScreen extends StatefulWidget {
@@ -251,7 +252,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
                   value: analyticsVM.getFormattedTotalIntake(),
                   subtitle: 'Past ${analyticsVM.analysisDays} days',
                   icon: Icons.waves,
-                  color: AppColors.lightBlue,
+                  color: AppColors.waterBlueLight,
                 ),
               ),
             ],
@@ -453,10 +454,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
                     analyticsVM.analyticsData?.goalCompletionRate ?? 0.0,
                     Colors.blue,
                   ),
-                  const SizedBox(height: 12),
-                  _buildProgressIndicator(
+                  const SizedBox(height: 12),                  _buildProgressIndicator(
                     'Consistency Score',
-                    analyticsVM.analyticsData?.consistencyScore ?? 0.0,
+                    analyticsVM.analyticsData?.goalCompletionRate ?? 0.0,
                     Colors.green,
                   ),
                   const SizedBox(height: 12),
@@ -617,7 +617,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
                 separatorBuilder: (context, index) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
                   final day = recentDays[index];
-                  final goalMet = day.totalIntake >= (day.dailyGoal ?? 2000);
+                  final goalMet = day.totalIntake >= day.goalAmount;
                   
                   return Container(
                     width: 40,
@@ -704,7 +704,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
     IconData iconData;
     Color iconColor;
     
-    switch (insight.type) {
+    switch (insight.insightType) {
       case 'achievement':
         iconData = Icons.star;
         iconColor = Colors.amber;
@@ -744,7 +744,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
                     insight.description,
                     style: TextStyle(color: Colors.grey[600]),
                   ),
-                  if (insight.actionable) ...[
+                  if (insight.relevanceScore > 0.8) ...[
                     const SizedBox(height: 8),
                     Text(
                       '💡 ${insight.recommendation}',

@@ -4,6 +4,7 @@ import '../widgets/gradient_background.dart';
 import 'home_screen.dart';
 import 'history_screen.dart';
 import 'achievement_screen.dart';
+import 'analytics_screen.dart';
 import 'profile_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -20,10 +21,10 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   late AnimationController _pageController;
   late Animation<Offset> _navBarAnimation;
   late Animation<double> _fadeAnimation;
-  
-  final List<Widget> _screens = [
+    final List<Widget> _screens = [
     const HomeScreen(),
     const HistoryScreen(),
+    const AnalyticsScreen(),
     const AchievementScreen(),
     const ProfileScreen(),
   ];
