@@ -51,13 +51,11 @@ class _HomeScreenState extends State<HomeScreen> {
               subtitle: 'Please complete your profile setup to start tracking your water intake.',
               icon: Icons.person_add,
             );
-          }
-
-          return RefreshIndicator(
+          }          return RefreshIndicator(
             onRefresh: viewModel.refreshData,
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -75,8 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         },
-      ),
-      floatingActionButton: Consumer<HomeViewModel>(
+      ),      floatingActionButton: Consumer<HomeViewModel>(
         builder: (context, viewModel, child) {
           return FloatingActionButton(
             onPressed: () => _showAddWaterDialog(context, viewModel),
@@ -85,6 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -97,9 +95,9 @@ class _HomeScreenState extends State<HomeScreen> {
       greeting = 'Good afternoon';
     } else if (now.hour >= 17) {
       greeting = 'Good evening';
-    }
-
-    return Card(
+    }    return Card(
+      elevation: 3,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
@@ -108,8 +106,10 @@ class _HomeScreenState extends State<HomeScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              AppColors.waterBlueLight.withOpacity(0.1),
-              AppColors.waterBlue.withOpacity(0.1),
+              // ignore: deprecated_member_use
+              AppColors.waterBlueLight.withOpacity(0.15),
+              // ignore: deprecated_member_use
+              AppColors.waterBlue.withOpacity(0.08),
             ],
           ),
         ),
@@ -118,37 +118,42 @@ class _HomeScreenState extends State<HomeScreen> {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
+                children: [                  Text(
                     '$greeting, ${profile.name}!',
                     style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.waterBlueDark,
+                      letterSpacing: -0.5,
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
+                  ),                  const SizedBox(height: 8),
+                  const Text(
                     'Let\'s stay hydrated today!',
                     style: TextStyle(
                       fontSize: 16,
                       color: AppColors.textSecondary,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],
               ),
-            ),
-            Container(
+            ),            Container(
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: AppColors.waterBlue.withOpacity(0.2),
+                // ignore: deprecated_member_use
+                color: AppColors.waterBlue.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(30),
+                border: Border.all(
+                  // ignore: deprecated_member_use
+                  color: AppColors.waterBlue.withOpacity(0.2),
+                  width: 1.5,
+                ),
               ),
               child: const Icon(
                 Icons.water_drop,
                 color: AppColors.waterBlue,
-                size: 30,
+                size: 28,
               ),
             ),
           ],
@@ -241,10 +246,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
-            ),
-            Text(
+            ),            Text(
               '${viewModel.todayIntakes.length} entries',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
                 color: AppColors.textSecondary,
               ),
@@ -317,8 +321,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                         backgroundColor: selectedAmount == amount 
                             ? AppColors.waterBlue 
-                            : null,
-                        labelStyle: TextStyle(
+                            : null,                        labelStyle: TextStyle(
                           color: selectedAmount == amount 
                               ? Colors.white 
                               : null,
