@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/home_viewmodel.dart';
+import '../viewmodels/achievement_viewmodel.dart';
 import '../widgets/common_widgets.dart';
 import '../utils/app_theme.dart';
 import '../utils/helpers.dart';
@@ -12,12 +13,12 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  @override
+class _HomeScreenState extends State<HomeScreen> {  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<HomeViewModel>(context, listen: false).initialize();
+      Provider.of<AchievementViewModel>(context, listen: false).initialize();
     });
   }
 
@@ -57,11 +58,12 @@ class _HomeScreenState extends State<HomeScreen> {
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                crossAxisAlignment: CrossAxisAlignment.start,                children: [
                   _buildWelcomeCard(viewModel),
                   const SizedBox(height: 20),
                   _buildProgressCard(viewModel),
+                  const SizedBox(height: 20),
+                  _buildAchievementSummary(viewModel),
                   const SizedBox(height: 20),
                   _buildQuickAddSection(viewModel),
                   const SizedBox(height: 20),
@@ -274,6 +276,78 @@ class _HomeScreenState extends State<HomeScreen> {
             }).toList(),
           ),
       ],
+    );
+  }
+
+  Widget _buildAchievementSummary(HomeViewModel viewModel) {
+    return Consumer<AchievementViewModel>(
+      builder: (context, achievementViewModel, child) {
+        final totalUnlocked = achievementViewModel.totalUnlocked;
+        final totalAchievements = achievementViewModel.totalAchievements;
+        
+        if (totalAchievements == 0) return const SizedBox.shrink();
+        
+        return Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: AppColors.waterBlue.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: const Icon(
+                    Icons.emoji_events,
+                    color: AppColors.waterBlue,
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Achievements',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textPrimary,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        '$totalUnlocked of $totalAchievements unlocked',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: AppColors.success.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    '${(achievementViewModel.completionPercentage * 100).toInt()}%',
+                    style: const TextStyle(
+                      color: AppColors.success,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

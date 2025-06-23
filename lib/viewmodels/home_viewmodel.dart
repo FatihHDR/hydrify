@@ -58,7 +58,6 @@ class HomeViewModel extends ChangeNotifier {
     _todayTotal = _todayIntakes.fold(0, (sum, intake) => sum + intake.amount);
     notifyListeners();
   }
-
   Future<void> addWaterIntake(int amount) async {
     try {
       final now = DateTime.now();
@@ -70,6 +69,9 @@ class HomeViewModel extends ChangeNotifier {
 
       await _databaseService.insertWaterIntake(intake);
       await _loadTodayIntakes();
+      
+      // Check for achievements after adding water intake
+      await _checkAchievements();
       
       // Show success notification
       await _notificationService.showInstantReminder();
@@ -123,5 +125,22 @@ class HomeViewModel extends ChangeNotifier {
 
   List<int> getQuickAddAmounts() {
     return [200, 250, 300, 500, 750, 1000]; // Common water amounts in ml
+  }
+  Future<void> _checkAchievements() async {
+    try {
+      // Get current stats for achievement checking
+      final currentStreak = await _databaseService.getCurrentStreak();
+      final totalLifetimeIntake = await _databaseService.getTotalLifetimeIntake();
+      final dailyGoalsReached = await _databaseService.getDailyGoalsReachedCount();
+      
+      // Trigger achievement checking through event bus or notification
+      // For now, we'll print the stats for debugging
+      debugPrint('Current streak: $currentStreak');
+      debugPrint('Total lifetime intake: $totalLifetimeIntake ml');
+      debugPrint('Daily goals reached: $dailyGoalsReached');
+      
+    } catch (e) {
+      debugPrint('Error checking achievements: $e');
+    }
   }
 }
