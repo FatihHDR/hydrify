@@ -165,7 +165,7 @@ class QuickAddButton extends StatelessWidget {
               Text(
                 '${amount}ml',
                 style: TextStyle(
-                  color: isSelected ? Colors.white : AppColors.textPrimary,
+                  color: isSelected ? Colors.white : AppColors.getTextPrimary(context),
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
@@ -216,11 +216,10 @@ class WaterIntakeListItem extends StatelessWidget {
             fontWeight: FontWeight.w600,
             fontSize: 16,
           ),
-        ),
-        subtitle: Text(
+        ),        subtitle: Text(
           _formatTime(time),
           style: TextStyle(
-            color: AppColors.textSecondary,
+            color: AppColors.getTextSecondary(context),
             fontSize: 14,
           ),
         ),
@@ -300,28 +299,26 @@ class EmptyStateWidget extends StatelessWidget {
         padding: const EdgeInsets.all(32),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
+          children: [            Icon(
               icon,
               size: 80,
-              color: AppColors.textLight,
+              color: AppColors.getTextLight(context),
             ),
             const SizedBox(height: 24),
             Text(
               title,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: AppColors.getTextPrimary(context),
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 8),
-            Text(
+            const SizedBox(height: 8),            Text(
               subtitle,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
-                color: AppColors.textSecondary,
+                color: AppColors.getTextSecondary(context),
               ),
               textAlign: TextAlign.center,
             ),
@@ -354,12 +351,11 @@ class LoadingWidget extends StatelessWidget {
             color: AppColors.waterBlue,
           ),
           if (message != null) ...[
-            const SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),            Text(
               message!,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
-                color: AppColors.textSecondary,
+                color: AppColors.getTextSecondary(context),
               ),
             ),
           ],

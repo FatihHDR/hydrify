@@ -472,12 +472,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
+              children: [                Text(
                   title,
                   style: TextStyle(
                     fontSize: 14,
-                    color: AppColors.textSecondary,
+                    color: AppColors.getTextSecondary(context),
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -572,7 +571,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(width: 12),                Text(
                   'Account',
                   style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: AppColors.textSecondary,
+                    color: AppColors.getTextSecondary(context),
                     fontWeight: FontWeight.w600,
                   ),
                 ),
