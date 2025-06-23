@@ -375,13 +375,12 @@ class _HomeScreenState extends State<HomeScreen> {  @override
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
+                    children: [                      const Text(
                         'Achievements',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                          color: AppColors.waterBlue,
                         ),
                       ),
                       const SizedBox(height: 4),
@@ -389,7 +388,7 @@ class _HomeScreenState extends State<HomeScreen> {  @override
                         '$totalUnlocked of $totalAchievements unlocked',
                         style: const TextStyle(
                           fontSize: 14,
-                          color: AppColors.textSecondary,
+                          color: AppColors.waterBlue,
                         ),
                       ),
                     ],
