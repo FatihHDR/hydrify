@@ -3,12 +3,16 @@ class WaterIntakeModel {
   final DateTime date;
   final int amount; // in ml
   final DateTime timestamp;
+  final String? drinkTypeId; // Reference to drink type
+  final int? effectiveAmount; // Actual water content after applying multiplier
 
   WaterIntakeModel({
     this.id,
     required this.date,
     required this.amount,
     required this.timestamp,
+    this.drinkTypeId,
+    this.effectiveAmount,
   });
 
   Map<String, dynamic> toMap() {
@@ -17,6 +21,8 @@ class WaterIntakeModel {
       'date': date.toIso8601String(),
       'amount': amount,
       'timestamp': timestamp.toIso8601String(),
+      'drinkTypeId': drinkTypeId,
+      'effectiveAmount': effectiveAmount,
     };
   }
 
@@ -26,6 +32,8 @@ class WaterIntakeModel {
       date: DateTime.parse(map['date']),
       amount: map['amount'],
       timestamp: DateTime.parse(map['timestamp']),
+      drinkTypeId: map['drinkTypeId'],
+      effectiveAmount: map['effectiveAmount'],
     );
   }
 

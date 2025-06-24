@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import '../models/water_intake_model.dart';
 import '../models/user_profile_model.dart';
+import '../models/drink_type_model.dart';
 import '../services/database_service.dart';
 import '../services/notification_service.dart';
 
@@ -51,20 +52,26 @@ class HomeViewModel extends ChangeNotifier {
     _userProfile = await _databaseService.getUserProfile();
     notifyListeners();
   }
-
   Future<void> _loadTodayIntakes() async {
     final today = DateTime.now();
     _todayIntakes = await _databaseService.getWaterIntakeByDate(today);
-    _todayTotal = _todayIntakes.fold(0, (sum, intake) => sum + intake.amount);
+    // Use effective amount if available, otherwise use regular amount
+    _todayTotal = _todayIntakes.fold(0, (sum, intake) => 
+        sum + (intake.effectiveAmount ?? intake.amount));
     notifyListeners();
-  }
-  Future<void> addWaterIntake(int amount) async {
+  }Future<void> addWaterIntake(int amount, {DrinkTypeModel? drinkType}) async {
     try {
       final now = DateTime.now();
+      final effectiveAmount = drinkType != null 
+          ? (amount * drinkType.multiplier).round() 
+          : amount;
+          
       final intake = WaterIntakeModel(
         date: now,
         amount: amount,
         timestamp: now,
+        drinkTypeId: drinkType?.id,
+        effectiveAmount: effectiveAmount,
       );
 
       await _databaseService.insertWaterIntake(intake);
@@ -79,6 +86,11 @@ class HomeViewModel extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error adding water intake: $e');
     }
+  }
+
+  // Legacy method for backward compatibility
+  Future<void> addWaterIntakeSimple(int amount) async {
+    await addWaterIntake(amount);
   }
 
   Future<void> removeWaterIntake(WaterIntakeModel intake) async {

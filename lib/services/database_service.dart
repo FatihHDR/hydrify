@@ -17,24 +17,24 @@ class DatabaseService {
     if (_database != null) return _database!;
     _database = await _initDatabase();
     return _database!;
-  }
-  Future<Database> _initDatabase() async {
+  }  Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), 'hydrify.db');
     return await openDatabase(
       path,
-      version: 2,
+      version: 3,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
   }
 
-  Future<void> _onCreate(Database db, int version) async {
-    await db.execute('''
+  Future<void> _onCreate(Database db, int version) async {    await db.execute('''
       CREATE TABLE water_intake (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         date TEXT NOT NULL,
         amount INTEGER NOT NULL,
-        timestamp TEXT NOT NULL
+        timestamp TEXT NOT NULL,
+        drinkTypeId TEXT,
+        effectiveAmount INTEGER
       )
     ''');
 
@@ -66,7 +66,6 @@ class DatabaseService {
       )
     ''');
   }
-
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < 2) {
       await db.execute('''
@@ -80,6 +79,25 @@ class DatabaseService {
           unlockedDate TEXT,
           type INTEGER NOT NULL,
           color INTEGER NOT NULL
+        )
+      ''');
+    }
+    
+    if (oldVersion < 3) {
+      // Add new columns to water_intake table for drink types
+      await db.execute('ALTER TABLE water_intake ADD COLUMN drinkTypeId TEXT');
+      await db.execute('ALTER TABLE water_intake ADD COLUMN effectiveAmount INTEGER');
+      
+      // Create drink_types table
+      await db.execute('''
+        CREATE TABLE IF NOT EXISTS drink_types (
+          id TEXT PRIMARY KEY,
+          name TEXT NOT NULL,
+          icon INTEGER NOT NULL,
+          color INTEGER NOT NULL,
+          multiplier REAL NOT NULL DEFAULT 1.0,
+          isDefault INTEGER NOT NULL DEFAULT 0,
+          createdAt INTEGER
         )
       ''');
     }
