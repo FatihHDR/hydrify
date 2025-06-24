@@ -60,33 +60,43 @@ class _HomeScreenState extends State<HomeScreen> {  @override
             );
           }          return RefreshIndicator(
             onRefresh: viewModel.refreshData,
-            child: SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,                children: [
-                  _buildWelcomeCard(viewModel),
-                  const SizedBox(height: 20),
-                  _buildProgressCard(viewModel),
-                  const SizedBox(height: 20),
-                  _buildAchievementSummary(viewModel),
-                  const SizedBox(height: 20),
-                  _buildQuickAddSection(viewModel),
-                  const SizedBox(height: 20),
-                  _buildMotivationalMessage(viewModel),
-                  const SizedBox(height: 20),
-                  _buildTodayIntakes(viewModel),
-                ],
-              ),
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 120), // Extra padding for FAB
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildWelcomeCard(viewModel),
+                      const SizedBox(height: 20),
+                      _buildProgressCard(viewModel),
+                      const SizedBox(height: 20),
+                      _buildAchievementSummary(viewModel),
+                      const SizedBox(height: 20),
+                      _buildQuickAddSection(viewModel),
+                      const SizedBox(height: 20),
+                      _buildMotivationalMessage(viewModel),
+                      const SizedBox(height: 20),
+                      _buildTodayIntakes(viewModel),
+                    ],
+                  ),
+                ),
+                // Positioned add water button above bottom navigation
+                Positioned(
+                  bottom: 110, // Position above bottom nav (nav is at bottom: 20, height ~70)
+                  right: 20,
+                  child: QuickAddWaterButton(
+                    onAdd: (amount, drinkType) async {
+                      final homeVM = Provider.of<HomeViewModel>(context, listen: false);
+                      await homeVM.addWaterIntake(amount, drinkType: drinkType);
+                    },
+                  ),
+                ),
+              ],
             ),
           );        },
-      ),      floatingActionButton: QuickAddWaterButton(
-        onAdd: (amount, drinkType) async {
-          final homeVM = Provider.of<HomeViewModel>(context, listen: false);
-          await homeVM.addWaterIntake(amount, drinkType: drinkType);
-        },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     ),
     );
   }

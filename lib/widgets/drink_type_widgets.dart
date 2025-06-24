@@ -87,7 +87,7 @@ class DrinkTypeSelector extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                         color: Colors.transparent,
                       ),
-                      child: Row(
+                      child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Icon(
@@ -95,7 +95,7 @@ class DrinkTypeSelector extends StatelessWidget {
                             size: 18,
                             color: AppColors.primary,
                           ),
-                          const SizedBox(width: 4),
+                          SizedBox(width: 4),
                           Text(
                             'Add Custom',
                             style: TextStyle(
@@ -121,7 +121,7 @@ class DrinkTypeSelector extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.error_outline, color: Colors.red, size: 16),
+                    const Icon(Icons.error_outline, color: Colors.red, size: 16),
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
@@ -289,7 +289,7 @@ class DrinkTypeChip extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             ListTile(
-              leading: Icon(Icons.edit, color: AppColors.primary),
+              leading: const Icon(Icons.edit, color: AppColors.primary),
               title: const Text('Edit'),
               onTap: () {
                 Navigator.pop(context);
