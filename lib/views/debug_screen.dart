@@ -7,6 +7,7 @@ import '../services/database_service.dart';
 import '../utils/app_theme.dart';
 import '../utils/theme_manager.dart';
 import '../widgets/theme_widgets.dart';
+import '../widgets/gradient_background.dart';
 import 'analytics_screen.dart';
 import 'drink_type_management_screen.dart';
 
@@ -17,44 +18,46 @@ class DebugScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<ThemeManager>(
       builder: (context, themeManager, child) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Debug Panel'),
-            backgroundColor: themeManager.isDarkMode ? AppColors.surfaceDark : AppColors.waterBlue,
-            foregroundColor: themeManager.isDarkMode ? AppColors.textPrimaryDark : Colors.white,
-            actions: [
-              // Animated theme toggle button in app bar
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: AnimatedThemeToggle(
-                  size: 20,
-                  onToggle: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          themeManager.isDarkMode 
-                              ? 'Switched to Light Mode' 
-                              : 'Switched to Dark Mode'
+        return GradientBackground(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              title: const Text('Debug Panel'),
+              backgroundColor: Colors.transparent,
+              foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
+              elevation: 0,
+              actions: [
+                // Animated theme toggle button in app bar
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: AnimatedThemeToggle(
+                    size: 20,
+                    onToggle: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            themeManager.isDarkMode 
+                                ? 'Switched to Light Mode' 
+                                : 'Switched to Dark Mode'
+                          ),
+                          duration: const Duration(seconds: 1),
+                          backgroundColor: themeManager.isDarkMode 
+                              ? AppColors.surfaceDark 
+                              : AppColors.surface,
                         ),
-                        duration: const Duration(seconds: 1),
-                        backgroundColor: themeManager.isDarkMode 
-                            ? AppColors.surfaceDark 
-                            : AppColors.surface,
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
-          ),
-          body: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            color: themeManager.isDarkMode ? AppColors.backgroundDark : AppColors.background,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+              ],
+            ),
+            body: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), // Added extra bottom padding
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
                   // Theme Controls Section
                   AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
@@ -365,67 +368,71 @@ class DebugScreen extends StatelessWidget {
                       foregroundColor: Colors.white,
                     ),
                     child: const Text('Open Analytics Screen'),
-                  ),
-                  
+                  ),                  
                   const SizedBox(height: 16),
                   
                   // Achievement list
-                  Expanded(
-                    child: Consumer<AchievementViewModel>(
-                      builder: (context, achievementVM, child) {
-                        if (achievementVM.achievements.isEmpty) {
-                          return Center(
+                  Consumer<AchievementViewModel>(
+                    builder: (context, achievementVM, child) {
+                      if (achievementVM.achievements.isEmpty) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
                             child: Text(
                               'No achievements found',
                               style: TextStyle(
                                 color: themeManager.isDarkMode ? AppColors.textSecondaryDark : AppColors.textSecondary,
                               ),
                             ),
-                          );
-                        }
-                        
-                        return AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          child: ListView.builder(
-                            itemCount: achievementVM.achievements.length,
-                            itemBuilder: (context, index) {
-                              final achievement = achievementVM.achievements[index];
-                              return AnimatedContainer(
-                                duration: const Duration(milliseconds: 300),
-                                margin: const EdgeInsets.only(bottom: 8),
-                                child: Card(
-                                  color: themeManager.isDarkMode ? AppColors.surfaceDark : AppColors.surface,
-                                  child: ListTile(
-                                    leading: Icon(
-                                      achievement.icon,
-                                      color: achievement.color,
-                                    ),
-                                    title: Text(
-                                      achievement.title,
-                                      style: TextStyle(
-                                        color: themeManager.isDarkMode ? AppColors.textPrimaryDark : AppColors.textPrimary,
-                                      ),
-                                    ),
-                                    subtitle: Text(
-                                      achievement.description,
-                                      style: TextStyle(
-                                        color: themeManager.isDarkMode ? AppColors.textSecondaryDark : AppColors.textSecondary,
-                                      ),
-                                    ),
-                                    trailing: Icon(
-                                      achievement.isUnlocked ? Icons.check_circle : Icons.lock,
-                                      color: achievement.isUnlocked ? Colors.green : Colors.grey,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
                           ),
                         );
-                      },
-                    ),
+                      }
+                      
+                      return AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: achievementVM.achievements.length,
+                          itemBuilder: (context, index) {
+                            final achievement = achievementVM.achievements[index];
+                            return AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              margin: const EdgeInsets.only(bottom: 8),
+                              child: Card(
+                                color: themeManager.isDarkMode ? AppColors.surfaceDark : AppColors.surface,
+                                child: ListTile(
+                                  leading: Icon(
+                                    achievement.icon,
+                                    color: achievement.color,
+                                  ),
+                                  title: Text(
+                                    achievement.title,
+                                    style: TextStyle(
+                                      color: themeManager.isDarkMode ? AppColors.textPrimaryDark : AppColors.textPrimary,
+                                    ),
+                                  ),
+                                  subtitle: Text(
+                                    achievement.description,
+                                    style: TextStyle(
+                                      color: themeManager.isDarkMode ? AppColors.textSecondaryDark : AppColors.textSecondary,
+                                    ),
+                                  ),
+                                  trailing: Icon(
+                                    achievement.isUnlocked ? Icons.check_circle : Icons.lock,
+                                    color: achievement.isUnlocked ? Colors.green : Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),                      );
+                    },
                   ),
-                ],
+                  const SizedBox(height: 16), // Extra space at bottom
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
