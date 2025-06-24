@@ -201,10 +201,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
       ), // Close GradientBackground
     );
   }
-
   Widget _buildOverviewTab(AnalyticsViewModel analyticsVM) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), // Extra bottom padding for nav
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -270,10 +269,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
       ),
     );
   }
-
   Widget _buildTrendsTab(AnalyticsViewModel analyticsVM) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), // Extra bottom padding for nav
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -376,10 +374,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
       ),
     );
   }
-
   Widget _buildInsightsTab(AnalyticsViewModel analyticsVM) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), // Extra bottom padding for nav
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -431,10 +428,9 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
       ),
     );
   }
-
   Widget _buildProgressTab(AnalyticsViewModel analyticsVM) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), // Extra bottom padding for nav
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -77,10 +77,9 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
     ),
     );
   }
-
   Widget _buildChartTab(HistoryViewModel viewModel) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), // Extra bottom padding for nav
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -380,12 +379,10 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
         subtitle: 'Start tracking your water intake to see your history here.',
         icon: Icons.history,
       );
-    }
-
-    return RefreshIndicator(
+    }    return RefreshIndicator(
       onRefresh: viewModel.refreshHistory,
       child: ListView.builder(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), // Extra bottom padding for nav
         itemCount: groupedHistory.length,
         itemBuilder: (context, index) {
           final dayData = groupedHistory[index];

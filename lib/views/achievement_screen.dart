@@ -140,12 +140,11 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
       ),
     );
   }
-
   Widget _buildAllAchievements(AchievementViewModel viewModel) {
     final grouped = _groupAchievementsByType(viewModel.achievements);
     
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), // Extra bottom padding for navigation bar
       itemCount: grouped.length,
       itemBuilder: (context, index) {
         final type = grouped.keys.elementAt(index);
@@ -158,7 +157,6 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
       },
     );
   }
-
   Widget _buildUnlockedAchievements(AchievementViewModel viewModel) {
     if (viewModel.unlockedAchievements.isEmpty) {
       return const EmptyStateWidget(
@@ -169,7 +167,7 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
     }
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), // Extra bottom padding for navigation bar
       itemCount: viewModel.unlockedAchievements.length,
       itemBuilder: (context, index) {
         final achievement = viewModel.unlockedAchievements[index];
@@ -207,10 +205,8 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
           ],
         ),
       );
-    }
-
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
+    }    return ListView.builder(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100), // Extra bottom padding for navigation bar
       itemCount: viewModel.lockedAchievements.length,
       itemBuilder: (context, index) {
         final achievement = viewModel.lockedAchievements[index];
