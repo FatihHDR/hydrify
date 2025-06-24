@@ -91,9 +91,9 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
     
     return Container(
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         gradient: AppColors.primaryGradient,
-        borderRadius: const BorderRadius.only(
+        borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(24),
           bottomRight: Radius.circular(24),
         ),
@@ -182,13 +182,13 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
     if (viewModel.lockedAchievements.isEmpty) {      return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,          children: [
-            Icon(
+            const Icon(
               Icons.lock_open,
               size: 80,
               color: AppColors.success,
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'All Achievements Unlocked!',
               style: TextStyle(
                 fontSize: 20,
@@ -196,7 +196,7 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
                 color: AppColors.success,
               ),
             ),
-            SizedBox(height: 8),Text(
+            const SizedBox(height: 8),Text(
               'Congratulations on your hydration mastery!',
               style: TextStyle(
                 fontSize: 16,

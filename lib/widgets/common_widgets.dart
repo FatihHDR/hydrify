@@ -143,7 +143,7 @@ class QuickAddButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 80,
       height: 80,
       child: Material(

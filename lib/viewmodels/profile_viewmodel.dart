@@ -34,8 +34,7 @@ class ProfileViewModel extends ChangeNotifier {
     _userProfile = await _databaseService.getUserProfile();
     
     // If no profile exists, create a default one
-    if (_userProfile == null) {
-      _userProfile = UserProfileModel(
+    _userProfile ??= UserProfileModel(
         name: '',
         age: 25,
         weight: 70.0,
@@ -43,7 +42,6 @@ class ProfileViewModel extends ChangeNotifier {
         startTime: DateTime(2024, 1, 1, 7, 0), // 7:00 AM
         endTime: DateTime(2024, 1, 1, 22, 0),   // 10:00 PM
       );
-    }
     
     notifyListeners();
   }

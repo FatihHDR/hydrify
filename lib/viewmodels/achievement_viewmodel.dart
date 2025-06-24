@@ -7,7 +7,7 @@ class AchievementViewModel extends ChangeNotifier {
   final DatabaseService _databaseService = DatabaseService();
 
   List<Achievement> _achievements = [];
-  List<Achievement> _recentlyUnlocked = [];
+  final List<Achievement> _recentlyUnlocked = [];
   bool _isLoading = false;
 
   // Getters

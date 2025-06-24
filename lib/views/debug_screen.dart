@@ -145,7 +145,7 @@ class DebugScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 12),
-                            ThemeToggleSwitch(scale: 1.2),
+                            const ThemeToggleSwitch(scale: 1.2),
                           ],
                         ),
                       ],

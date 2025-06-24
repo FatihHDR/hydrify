@@ -144,7 +144,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: Colors.white.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(40),
               ),
-              child: Icon(
+              child: const Icon(
                 Icons.person,
                 size: 40,
                 color: Colors.white,
@@ -255,11 +255,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           child: Column(
             children: [
-              Row(
+              const Row(
                 children: [
-                  const Icon(Icons.info, color: AppColors.waterBlue),
-                  const SizedBox(width: 12),
-                  const Expanded(
+                  Icon(Icons.info, color: AppColors.waterBlue),
+                  SizedBox(width: 12),
+                  Expanded(
                     child: Text(
                       'Recommended: 35ml per kg of body weight',
                       style: TextStyle(fontSize: 14),
@@ -551,7 +551,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           children: [
             Row(
               children: [
-                Icon(
+                const Icon(
                   Icons.account_circle,
                   color: AppColors.waterBlue,
                   size: 24,

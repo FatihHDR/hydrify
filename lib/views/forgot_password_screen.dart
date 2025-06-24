@@ -79,7 +79,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           color: AppColors.waterBlueLight.withOpacity(0.2),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Icon(
+        child: const Icon(
           Icons.lock_reset,
           size: 40,
           color: AppColors.waterBlue,
@@ -172,14 +172,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.waterBlueLight.withOpacity(0.3)),
       ),
-      child: Row(
+      child: const Row(
         children: [
           Icon(
             Icons.info_outline,
             color: AppColors.waterBlue,
             size: 20,
           ),
-          const SizedBox(width: 12),
+          SizedBox(width: 12),
           Expanded(
             child: Text(
               'Check your spam folder if you don\'t receive the email within a few minutes.',
@@ -229,7 +229,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             size: 30,
           ),
         ),
-        title: Text(
+        title: const Text(
           'Email Sent!',
           style: TextStyle(
             color: AppColors.textPrimary,
@@ -240,7 +240,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         ),
         content: Text(
           'We\'ve sent a password reset link to ${_emailController.text.trim()}',
-          style: TextStyle(
+          style: const TextStyle(
             color: AppColors.textSecondary,
             fontSize: 14,
             height: 1.5,

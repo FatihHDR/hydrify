@@ -269,8 +269,4 @@ class AnalyticsViewModel extends ChangeNotifier {
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 }

@@ -63,7 +63,7 @@ class DrinkTypeManagementScreen extends StatelessWidget {
                         padding: const EdgeInsets.all(16),
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.analytics,
                               color: AppColors.primary,
                               size: 32,
@@ -251,7 +251,7 @@ class DrinkTypeManagementScreen extends StatelessWidget {
                                               color: AppColors.success.withOpacity(0.2),
                                               borderRadius: BorderRadius.circular(12),
                                             ),
-                                            child: Text(
+                                            child: const Text(
                                               'Selected',
                                               style: TextStyle(
                                                 color: AppColors.success,
@@ -261,7 +261,7 @@ class DrinkTypeManagementScreen extends StatelessWidget {
                                             ),
                                           ),
                                         IconButton(
-                                          icon: Icon(Icons.edit, color: AppColors.primary),
+                                          icon: const Icon(Icons.edit, color: AppColors.primary),
                                           onPressed: () => _showEditDrinkTypeDialog(context, drinkType),
                                           tooltip: 'Edit',
                                         ),

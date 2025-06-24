@@ -214,7 +214,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               'This helps us personalize your experience',
               style: TextStyle(
                 fontSize: 16,
@@ -305,7 +305,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
+          const Text(
             'Based on your weight, we recommend a daily water intake',
             style: TextStyle(
               fontSize: 16,
@@ -340,10 +340,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.waterBlueLight),
             ),
-            child: Row(
+            child: const Row(
               children: [
-                const Icon(Icons.info, color: AppColors.waterBlue),
-                const SizedBox(width: 12),
+                Icon(Icons.info, color: AppColors.waterBlue),
+                SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     'Recommended intake: 35ml per kg of body weight',
@@ -375,7 +375,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          Text(
+          const Text(
             'Set up notifications to help you stay hydrated',
             style: TextStyle(
               fontSize: 16,
@@ -454,7 +454,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
-          Text(
+          const Text(
             'Start your hydration journey with Hydrify. Remember, small steps lead to big changes!',
             style: TextStyle(
               fontSize: 16,

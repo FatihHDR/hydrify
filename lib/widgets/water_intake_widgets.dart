@@ -49,11 +49,11 @@ class _AddWaterIntakeDialogState extends State<AddWaterIntakeDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Row(
+      title: const Row(
         children: [
           Icon(Icons.add_circle, color: AppColors.primary),
-          const SizedBox(width: 8),
-          const Text('Add Water Intake'),
+          SizedBox(width: 8),
+          Text('Add Water Intake'),
         ],
       ),
       content: SingleChildScrollView(

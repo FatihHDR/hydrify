@@ -186,7 +186,7 @@ class AnalyticsService {
         insightType: 'performance_pattern',
         title: 'Best Performance Day',
         description: 'You perform best on ${bestDay}s with higher water intake.',
-        recommendation: 'Try to replicate your ${bestDay} routine on other days.',
+        recommendation: 'Try to replicate your $bestDay routine on other days.',
         relevanceScore: 0.7,
       ));
     }
@@ -312,8 +312,9 @@ class AnalyticsService {
       final frequency = amounts.length;
       
       String timeLabel;
-      if (hour == 0) timeLabel = '12 AM';
-      else if (hour < 12) timeLabel = '$hour AM';
+      if (hour == 0) {
+        timeLabel = '12 AM';
+      } else if (hour < 12) timeLabel = '$hour AM';
       else if (hour == 12) timeLabel = '12 PM';
       else timeLabel = '${hour - 12} PM';
 

@@ -410,7 +410,7 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
                   color: AppColors.waterBlueLight.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Icon(
+                child: const Icon(
                   Icons.calendar_today,
                   color: AppColors.waterBlue,
                 ),

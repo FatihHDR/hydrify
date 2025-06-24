@@ -640,8 +640,8 @@ class Bottle3DPainter extends CustomPainter {
         waterPath.lineTo(left + 3, waterTop);
         
         // Create slightly wavy water surface
-        final waveAmplitude = 2.0;
-        final segments = 8;
+        const waveAmplitude = 2.0;
+        const segments = 8;
         final segmentWidth = (bottleWidth - 16) / segments;
         
         for (int i = 0; i <= segments; i++) {

@@ -29,7 +29,7 @@ class DateTimeUtils {
     } else if (difference == 1) {
       return 'Yesterday';
     } else if (difference < 7) {
-      return '${difference} days ago';
+      return '$difference days ago';
     } else {
       return formatDate(date);
     }

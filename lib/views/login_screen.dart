@@ -222,7 +222,7 @@ class _LoginScreenState extends State<LoginScreen> {
             MaterialPageRoute(builder: (_) => const ForgotPasswordScreen()),
           );
         },
-        child: Text(
+        child: const Text(
           'Forgot Password?',
           style: TextStyle(
             color: AppColors.waterBlue,
@@ -235,11 +235,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget _buildDivider() {
-    return Row(
+    return const Row(
       children: [
-        const Expanded(child: Divider(color: AppColors.textLight)),
+        Expanded(child: Divider(color: AppColors.textLight)),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             'or',
             style: TextStyle(
@@ -248,7 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-        const Expanded(child: Divider(color: AppColors.textLight)),
+        Expanded(child: Divider(color: AppColors.textLight)),
       ],
     );
   }
@@ -287,7 +287,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        const Text(
           "Don't have an account? ",
           style: TextStyle(
             color: AppColors.textSecondary,
@@ -305,7 +305,7 @@ class _LoginScreenState extends State<LoginScreen> {
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          child: Text(
+          child: const Text(
             'Sign Up',
             style: TextStyle(
               color: AppColors.waterBlue,

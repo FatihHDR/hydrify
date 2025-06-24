@@ -575,7 +575,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
                       child: LinearProgressIndicator(
                         value: performance,
                         backgroundColor: Colors.grey[200],
-                        valueColor: AlwaysStoppedAnimation<Color>(
+                        valueColor: const AlwaysStoppedAnimation<Color>(
                           AppColors.waterBlue,
                         ),
                       ),
@@ -588,7 +588,7 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
                   ],
                 ),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),

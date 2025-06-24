@@ -263,7 +263,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        const Text(
           "Already have an account? ",
           style: TextStyle(
             color: AppColors.textSecondary,
@@ -277,7 +277,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          child: Text(
+          child: const Text(
             'Sign In',
             style: TextStyle(
               color: AppColors.waterBlue,
