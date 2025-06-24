@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/achievement_viewmodel.dart';
 import '../viewmodels/home_viewmodel.dart';
+import '../viewmodels/drink_type_viewmodel.dart';
 import '../services/database_service.dart';
 import '../utils/app_theme.dart';
 import '../utils/theme_manager.dart';
 import '../widgets/theme_widgets.dart';
 import 'analytics_screen.dart';
+import 'drink_type_management_screen.dart';
 
 class DebugScreen extends StatelessWidget {
   const DebugScreen({super.key});
@@ -148,6 +150,65 @@ class DebugScreen extends StatelessWidget {
                         ),
                       ],
                     ),
+                  ),
+                  
+                  const SizedBox(height: 16),
+                  
+                  Text(
+                    'Features',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: themeManager.isDarkMode ? AppColors.textPrimaryDark : AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  
+                  // Feature buttons row
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AnalyticsScreen(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.analytics, size: 16),
+                          label: const Text('Analytics'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.accent,
+                            foregroundColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () async {
+                            // Initialize drink type service
+                            final drinkTypeVM = Provider.of<DrinkTypeViewModel>(context, listen: false);
+                            await drinkTypeVM.initialize();
+                            
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const DrinkTypeManagementScreen(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.local_drink, size: 16),
+                          label: const Text('Drink Types'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.purple,
+                            foregroundColor: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   
                   const SizedBox(height: 16),

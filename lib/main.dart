@@ -10,6 +10,7 @@ import 'viewmodels/history_viewmodel.dart';
 import 'viewmodels/auth_viewmodel.dart';
 import 'viewmodels/achievement_viewmodel.dart';
 import 'viewmodels/analytics_viewmodel.dart';
+import 'viewmodels/drink_type_viewmodel.dart';
 import 'views/splash_screen.dart';
 import 'utils/app_theme.dart';
 import 'utils/theme_manager.dart';
@@ -32,8 +33,7 @@ class HydrifyApp extends StatelessWidget {
   const HydrifyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MultiProvider(      providers: [
+  Widget build(BuildContext context) {    return MultiProvider(      providers: [
         ChangeNotifierProvider(create: (_) => ThemeManager()),
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
@@ -41,6 +41,7 @@ class HydrifyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => HistoryViewModel()),
         ChangeNotifierProvider(create: (_) => AchievementViewModel()),
         ChangeNotifierProvider(create: (_) => AnalyticsViewModel()),
+        ChangeNotifierProvider(create: (_) => DrinkTypeViewModel()),
       ],      child: Consumer<ThemeManager>(
         builder: (context, themeManager, child) {
           return AnimatedTheme(
