@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/home_viewmodel.dart';
@@ -31,23 +32,31 @@ class _HomeScreenState extends State<HomeScreen> {  @override
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
-        backgroundColor: Colors.transparent,        appBar: AppBar(
-        title: const Text('Hydrify'),
-        backgroundColor: Colors.transparent,
-        foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
-        elevation: 0,
-        surfaceTintColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        scrolledUnderElevation: 0,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: () {
-              Provider.of<HomeViewModel>(context, listen: false).refreshData();
-            },
+        backgroundColor: Colors.transparent,        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: AppBar(
+                title: const Text('Hydrify'),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7), // Blur transparent dengan opacity lebih besar
+                foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
+                elevation: 0,
+                surfaceTintColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                scrolledUnderElevation: 0,
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () {
+                      Provider.of<HomeViewModel>(context, listen: false).refreshData();
+                    },
+                  ),
+                ],
+              ),
+            ),
           ),
-        ],
-      ),
+        ),
       body: Consumer<HomeViewModel>(
         builder: (context, viewModel, child) {
           if (viewModel.isLoading) {

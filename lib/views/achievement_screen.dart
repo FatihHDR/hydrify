@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/achievement_viewmodel.dart';
@@ -34,14 +35,19 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
-        backgroundColor: Colors.transparent,        appBar: AppBar(
-          title: const Text('Achievements'),
-          backgroundColor: Colors.transparent,
-          foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
-          elevation: 0,
-          surfaceTintColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          scrolledUnderElevation: 0,
+        backgroundColor: Colors.transparent,        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight + kTextTabBarHeight),
+          child: ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: AppBar(
+                title: const Text('Achievements'),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
+                foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
+                elevation: 0,
+                surfaceTintColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                scrolledUnderElevation: 0,
         actions: [
           // Debug button to refresh achievements
           IconButton(
@@ -61,7 +67,10 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
             Tab(text: 'Locked'),
           ],
         ),
-      ),
+              ),
+            ),
+          ),
+        ),
       body: Consumer<AchievementViewModel>(
         builder: (context, viewModel, child) {
           if (viewModel.isLoading) {

@@ -909,27 +909,26 @@ class FloatingBottomNavBar extends StatelessWidget {
   });  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isDark = theme.brightness == Brightness.dark;
-      return Container(
+    final isDark = theme.brightness == Brightness.dark;    return Container(
       margin: const EdgeInsets.all(12),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(25),
         child: Container(
           height: 56,
           decoration: BoxDecoration(
-            color: (isDark ? AppColors.surfaceDark : AppColors.surface).withOpacity(0.7), // More transparent
+            color: isDark ? AppColors.surfaceDark : AppColors.surface, // Back to original solid color
             borderRadius: BorderRadius.circular(25),
             border: Border.all(
               color: isDark 
-                  ? AppColors.surfaceVariantDark.withOpacity(0.2)
-                  : AppColors.textLight.withOpacity(0.05),
+                  ? AppColors.surfaceVariantDark.withOpacity(0.3)
+                  : AppColors.textLight.withOpacity(0.1),
               width: 1,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(isDark ? 0.2 : 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 4),
+                color: Colors.black.withOpacity(isDark ? 0.3 : 0.1),
+                blurRadius: 15,
+                offset: const Offset(0, 8),
               ),
             ],
           ),

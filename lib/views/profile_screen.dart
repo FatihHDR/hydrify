@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/profile_viewmodel.dart';
@@ -57,12 +58,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: const Text('Profile'),
-          backgroundColor: Colors.transparent,
-          foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
-          elevation: 0,        actions: [
+        backgroundColor: Colors.transparent,        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight),
+          child: ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: AppBar(
+                title: const Text('Profile'),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
+                foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
+                elevation: 0,
+                surfaceTintColor: Colors.transparent,
+                shadowColor: Colors.transparent,                scrolledUnderElevation: 0,
+                actions: [
           // Animated theme toggle button
           const ThemeToggleButton(),
           // Debug button
@@ -91,7 +99,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             },
           ),
         ],
-      ),
+              ),
+            ),
+          ),
+        ),
       body: Consumer<ProfileViewModel>(
         builder: (context, viewModel, child) {
           if (viewModel.isLoading) {
