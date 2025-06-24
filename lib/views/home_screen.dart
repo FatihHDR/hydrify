@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/home_viewmodel.dart';
 import '../viewmodels/achievement_viewmodel.dart';
+import '../viewmodels/drink_type_viewmodel.dart';
 import '../widgets/common_widgets.dart';
 import '../widgets/advanced_widgets.dart';
 import '../widgets/gradient_background.dart';
+import '../widgets/water_intake_widgets.dart';
 import '../utils/app_theme.dart';
 import '../utils/helpers.dart';
 
@@ -15,13 +17,13 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  @override
+class _HomeScreenState extends State<HomeScreen> {  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<HomeViewModel>(context, listen: false).initialize();
       Provider.of<AchievementViewModel>(context, listen: false).initialize();
+      Provider.of<DrinkTypeViewModel>(context, listen: false).initialize();
     });
   }
 
@@ -78,16 +80,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           );        },
-      ),      floatingActionButton: Consumer<HomeViewModel>(
-        builder: (context, viewModel, child) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 90), // Move above navbar
-            child: FloatingActionButton(
-              onPressed: () => _showAddWaterDialog(context, viewModel),
-              backgroundColor: AppColors.waterBlue,
-              child: const Icon(Icons.add, color: Colors.white),
-            ),
-          );        },
+      ),      floatingActionButton: QuickAddWaterButton(
+        onAdd: (amount, drinkType) async {
+          final homeVM = Provider.of<HomeViewModel>(context, listen: false);
+          await homeVM.addWaterIntake(amount, drinkType: drinkType);
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     ),
@@ -443,85 +440,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-        );
-      },
-    );
-  }
-
-  Future<void> _showAddWaterDialog(BuildContext context, HomeViewModel viewModel) async {
-    final TextEditingController controller = TextEditingController();
-    int selectedAmount = 250;
-
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return AlertDialog(
-              title: const Text('Add Water Intake'),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextField(
-                    controller: controller,
-                    keyboardType: TextInputType.number,
-                    decoration: const InputDecoration(
-                      labelText: 'Amount (ml)',
-                      border: OutlineInputBorder(),
-                    ),
-                    onChanged: (value) {
-                      final amount = int.tryParse(value);
-                      if (amount != null) {
-                        selectedAmount = amount;
-                      }
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  const Text('Quick Select:'),
-                  const SizedBox(height: 8),
-                  Wrap(
-                    spacing: 8,
-                    children: [200, 250, 300, 500, 750].map((amount) {
-                      return ActionChip(
-                        label: Text('${amount}ml'),
-                        onPressed: () {
-                          setState(() {
-                            selectedAmount = amount;
-                            controller.text = amount.toString();
-                          });
-                        },
-                        backgroundColor: selectedAmount == amount 
-                            ? AppColors.waterBlue 
-                            : null,                        labelStyle: TextStyle(
-                          color: selectedAmount == amount 
-                              ? Colors.white 
-                              : null,
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ],
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('Cancel'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    final amount = int.tryParse(controller.text) ?? selectedAmount;
-                    if (amount > 0) {
-                      viewModel.addWaterIntake(amount);
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: const Text('Add'),
-                ),
-              ],
-            );
-          },
-        );
-      },
+        );      },
     );
   }
 
