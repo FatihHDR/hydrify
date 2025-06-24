@@ -35,12 +35,14 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
+        backgroundColor: Colors.transparent,        appBar: AppBar(
           title: const Text('Analytics'),
           backgroundColor: Colors.transparent,
           foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
-          elevation: 0,        bottom: TabBar(
+          elevation: 0,
+          surfaceTintColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          scrolledUnderElevation: 0,bottom: TabBar(
           controller: _tabController,
           indicatorColor: AppColors.waterBlue,
           labelColor: Theme.of(context).textTheme.titleLarge?.color,

@@ -35,12 +35,14 @@ class _HistoryScreenState extends State<HistoryScreen> with SingleTickerProvider
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
+        backgroundColor: Colors.transparent,        appBar: AppBar(
           title: const Text('History & Stats'),
           backgroundColor: Colors.transparent,
           foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
           elevation: 0,
+          surfaceTintColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          scrolledUnderElevation: 0,
           bottom: TabBar(
             controller: _tabController,
             indicatorColor: Theme.of(context).primaryColor,

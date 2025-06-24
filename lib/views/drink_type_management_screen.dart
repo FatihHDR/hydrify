@@ -14,12 +14,14 @@ class DrinkTypeManagementScreen extends StatelessWidget {
     return Consumer<DrinkTypeViewModel>(
       builder: (context, drinkTypeVM, child) {
         return Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
+          backgroundColor: Colors.transparent,          appBar: AppBar(
             title: const Text('Manage Drink Types'),
             backgroundColor: Colors.transparent,
             foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
             elevation: 0,
+            surfaceTintColor: Colors.transparent,
+            shadowColor: Colors.transparent,
+            scrolledUnderElevation: 0,
             actions: [
               IconButton(
                 icon: const Icon(Icons.add),

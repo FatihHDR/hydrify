@@ -34,12 +34,14 @@ class _AchievementScreenState extends State<AchievementScreen> with TickerProvid
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
+        backgroundColor: Colors.transparent,        appBar: AppBar(
           title: const Text('Achievements'),
           backgroundColor: Colors.transparent,
           foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
           elevation: 0,
+          surfaceTintColor: Colors.transparent,
+          shadowColor: Colors.transparent,
+          scrolledUnderElevation: 0,
         actions: [
           // Debug button to refresh achievements
           IconButton(

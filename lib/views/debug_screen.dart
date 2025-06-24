@@ -20,12 +20,14 @@ class DebugScreen extends StatelessWidget {
       builder: (context, themeManager, child) {
         return GradientBackground(
           child: Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
+            backgroundColor: Colors.transparent,            appBar: AppBar(
               title: const Text('Debug Panel'),
               backgroundColor: Colors.transparent,
               foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
               elevation: 0,
+              surfaceTintColor: Colors.transparent,
+              shadowColor: Colors.transparent,
+              scrolledUnderElevation: 0,
               actions: [
                 // Animated theme toggle button in app bar
                 Padding(
