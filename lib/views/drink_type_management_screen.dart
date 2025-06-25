@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/drink_type_viewmodel.dart';
@@ -14,14 +15,19 @@ class DrinkTypeManagementScreen extends StatelessWidget {
     return Consumer<DrinkTypeViewModel>(
       builder: (context, drinkTypeVM, child) {
         return Scaffold(
-          backgroundColor: Colors.transparent,          appBar: AppBar(
-            title: const Text('Manage Drink Types'),
-            backgroundColor: Colors.transparent,
-            foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
-            elevation: 0,
-            surfaceTintColor: Colors.transparent,
-            shadowColor: Colors.transparent,
-            scrolledUnderElevation: 0,
+          backgroundColor: Colors.transparent,          appBar: PreferredSize(
+            preferredSize: const Size.fromHeight(kToolbarHeight),
+            child: ClipRRect(
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                child: AppBar(
+                  title: const Text('Manage Drink Types'),
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
+                  foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
+                  elevation: 0,
+                  surfaceTintColor: Colors.transparent,
+                  shadowColor: Colors.transparent,
+                  scrolledUnderElevation: 0,
             actions: [
               IconButton(
                 icon: const Icon(Icons.add),
@@ -46,10 +52,12 @@ class DrinkTypeManagementScreen extends StatelessWidget {
                         Text('Reset to Defaults'),
                       ],
                     ),
-                  ),
-                ],
+                  ),                ],
               ),
             ],
+                ),
+              ),
+            ),
           ),
           body: GradientBackground(
             child: SafeArea(

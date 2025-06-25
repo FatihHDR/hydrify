@@ -36,14 +36,20 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
   Widget build(BuildContext context) {
     return GradientBackground(
       child: Scaffold(
-        backgroundColor: Colors.transparent,        appBar: AppBar(
-          title: const Text('Analytics'),
-          backgroundColor: Colors.transparent,
-          foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
-          elevation: 0,
-          surfaceTintColor: Colors.transparent,
-          shadowColor: Colors.transparent,
-          scrolledUnderElevation: 0,bottom: TabBar(
+        backgroundColor: Colors.transparent,        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(kToolbarHeight + kTextTabBarHeight),
+          child: ClipRRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+              child: AppBar(
+                title: const Text('Analytics'),
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor.withOpacity(0.7),
+                foregroundColor: Theme.of(context).textTheme.titleLarge?.color,
+                elevation: 0,
+                surfaceTintColor: Colors.transparent,
+                shadowColor: Colors.transparent,
+                scrolledUnderElevation: 0,
+        bottom: TabBar(
           controller: _tabController,
           indicatorColor: AppColors.waterBlue,
           labelColor: Theme.of(context).textTheme.titleLarge?.color,
@@ -114,11 +120,13 @@ class _AnalyticsScreenState extends State<AnalyticsScreen>
             icon: Icon(Icons.refresh, color: Theme.of(context).textTheme.titleLarge?.color),
             onPressed: () {
               Provider.of<AnalyticsViewModel>(context, listen: false)
-                  .refreshAnalytics();
-            },
+                  .refreshAnalytics();            },
           ),
         ],
-      ),
+              ),
+            ),
+          ),
+        ),
       body: Consumer<AnalyticsViewModel>(
         builder: (context, analyticsVM, child) {
           if (analyticsVM.isLoading) {
