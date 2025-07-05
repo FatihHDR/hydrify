@@ -50,6 +50,38 @@ class UserProfileModel {
       firebaseUid: map['firebaseUid'],
     );
   }
+  
+  // JSON serialization for Firestore
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'age': age,
+      'weight': weight,
+      'dailyGoal': dailyGoal,
+      'notificationsEnabled': notificationsEnabled,
+      'notificationInterval': notificationInterval,
+      'startTime': startTime.toIso8601String(),
+      'endTime': endTime.toIso8601String(),
+      'email': email,
+      'firebaseUid': firebaseUid,
+    };
+  }
+  
+  factory UserProfileModel.fromJson(Map<String, dynamic> json) {
+    return UserProfileModel(
+      name: json['name'] ?? '',
+      age: json['age'] ?? 0,
+      weight: json['weight']?.toDouble() ?? 0.0,
+      dailyGoal: json['dailyGoal'] ?? 2000,
+      notificationsEnabled: json['notificationsEnabled'] ?? true,
+      notificationInterval: json['notificationInterval'] ?? 60,
+      startTime: DateTime.parse(json['startTime']),
+      endTime: DateTime.parse(json['endTime']),
+      email: json['email'],
+      firebaseUid: json['firebaseUid'],
+    );
+  }
+
   UserProfileModel copyWith({
     String? name,
     int? age,

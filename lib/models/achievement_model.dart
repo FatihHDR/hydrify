@@ -86,6 +86,37 @@ class Achievement {
       color: Color(map['color']),
     );
   }
+  
+  // JSON serialization for Firestore
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'icon': icon.codePoint,
+      'requiredValue': requiredValue,
+      'isUnlocked': isUnlocked,
+      'unlockedDate': unlockedDate?.toIso8601String(),
+      'type': type.index,
+      'color': color.value,
+    };
+  }
+
+  factory Achievement.fromJson(Map<String, dynamic> json) {
+    return Achievement(
+      id: json['id'],
+      title: json['title'],
+      description: json['description'],
+      icon: IconData(json['icon'], fontFamily: 'MaterialIcons'),
+      requiredValue: json['requiredValue'],
+      isUnlocked: json['isUnlocked'] ?? false,
+      unlockedDate: json['unlockedDate'] != null 
+          ? DateTime.parse(json['unlockedDate']) 
+          : null,
+      type: AchievementType.values[json['type']],
+      color: Color(json['color']),
+    );
+  }
 
   // Predefined achievements
   static List<Achievement> getDefaultAchievements() {

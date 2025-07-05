@@ -44,6 +44,33 @@ class DrinkTypeModel {
           : null,
     );
   }
+  
+  // JSON serialization for Firestore
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'icon': icon.codePoint,
+      'color': color.value,
+      'multiplier': multiplier,
+      'isDefault': isDefault,
+      'createdAt': createdAt?.toIso8601String(),
+    };
+  }
+
+  factory DrinkTypeModel.fromJson(Map<String, dynamic> json) {
+    return DrinkTypeModel(
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
+      icon: IconData(json['icon'] ?? Icons.local_drink.codePoint, fontFamily: 'MaterialIcons'),
+      color: Color(json['color'] ?? Colors.blue.value),
+      multiplier: (json['multiplier'] ?? 1.0).toDouble(),
+      isDefault: json['isDefault'] ?? false,
+      createdAt: json['createdAt'] != null 
+          ? DateTime.parse(json['createdAt'])
+          : null,
+    );
+  }
 
   DrinkTypeModel copyWith({
     String? id,
