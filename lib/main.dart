@@ -18,10 +18,15 @@ import 'utils/theme_manager.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // Initialize Firebase (handle case where it's already initialized)
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    // Firebase already initialized - this is fine
+    print('Firebase already initialized: $e');
+  }
   
   // Initialize services
   await NotificationService().initialize();

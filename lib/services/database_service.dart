@@ -21,7 +21,7 @@ class DatabaseService {
     String path = join(await getDatabasesPath(), 'hydrify.db');
     return await openDatabase(
       path,
-      version: 3,
+      version: 4,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
     );
@@ -48,7 +48,9 @@ class DatabaseService {
         notificationsEnabled INTEGER NOT NULL,
         notificationInterval INTEGER NOT NULL,
         startTime TEXT NOT NULL,
-        endTime TEXT NOT NULL
+        endTime TEXT NOT NULL,
+        email TEXT,
+        firebaseUid TEXT
       )
     ''');
 
@@ -100,6 +102,23 @@ class DatabaseService {
           createdAt INTEGER
         )
       ''');
+    }
+    
+    if (oldVersion < 4) {
+      // Add email and firebaseUid columns to user_profile table
+      try {
+        await db.execute('ALTER TABLE user_profile ADD COLUMN email TEXT');
+      } catch (e) {
+        // Column might already exist
+        if (kDebugMode) print('Error adding email column: $e');
+      }
+      
+      try {
+        await db.execute('ALTER TABLE user_profile ADD COLUMN firebaseUid TEXT');
+      } catch (e) {
+        // Column might already exist
+        if (kDebugMode) print('Error adding firebaseUid column: $e');
+      }
     }
   }
 

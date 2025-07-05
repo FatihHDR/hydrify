@@ -92,7 +92,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               decoration: BoxDecoration(
                 color: index <= _currentPage 
                     ? AppColors.waterBlue 
-                    : AppColors.textLight.withOpacity(0.3),
+                    : AppColors.textLight.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -117,7 +117,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               borderRadius: BorderRadius.circular(25),
               boxShadow: [
                 BoxShadow(
-                  color: AppColors.waterBlue.withOpacity(0.15),
+                  color: AppColors.waterBlue.withValues(alpha: 0.15),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -177,7 +177,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             width: 24,
             height: 24,
             decoration: BoxDecoration(
-              color: AppColors.waterBlue.withOpacity(0.1),
+              color: AppColors.waterBlue.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(
@@ -201,91 +201,93 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget _buildPersonalInfoPage() {
     return Padding(
       padding: const EdgeInsets.all(32),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Tell us about yourself',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'This helps us personalize your experience',
-              style: TextStyle(
-                fontSize: 16,
-                color: AppColors.textSecondary,
-              ),
-            ),
-            const SizedBox(height: 32),            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(
-                labelText: 'Name',
-                hintText: 'Enter your name',
-                prefixIcon: Icon(Icons.person),
-              ),
-              validator: (value) {
-                if (value == null || value.trim().isEmpty) {
-                  return 'Name is required';
-                }
-                if (value.trim().length < 2) {
-                  return 'Name must be at least 2 characters';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [                Expanded(
-                  child: TextFormField(
-                    controller: _ageController,
-                    decoration: const InputDecoration(
-                      labelText: 'Age',
-                      hintText: 'Years',
-                      prefixIcon: Icon(Icons.cake),
-                    ),
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Age is required';
-                      }
-                      final age = int.tryParse(value.trim());
-                      if (age == null || age < 1 || age > 120) {
-                        return 'Enter a valid age (1-120)';
-                      }
-                      return null;
-                    },
-                  ),
+      child: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Tell us about yourself',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: TextFormField(
-                    controller: _weightController,
-                    decoration: const InputDecoration(
-                      labelText: 'Weight',
-                      hintText: 'kg',
-                      prefixIcon: Icon(Icons.fitness_center),
-                    ),
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Weight is required';
-                      }
-                      final weight = double.tryParse(value.trim());
-                      if (weight == null || weight < 1 || weight > 500) {
-                        return 'Enter a valid weight (1-500 kg)';
-                      }
-                      return null;
-                    },
-                  ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'This helps us personalize your experience',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppColors.textSecondary,
                 ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(height: 32),            TextFormField(
+                controller: _nameController,
+                decoration: const InputDecoration(
+                  labelText: 'Name',
+                  hintText: 'Enter your name',
+                  prefixIcon: Icon(Icons.person),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Name is required';
+                  }
+                  if (value.trim().length < 2) {
+                    return 'Name must be at least 2 characters';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [                Expanded(
+                    child: TextFormField(
+                      controller: _ageController,
+                      decoration: const InputDecoration(
+                        labelText: 'Age',
+                        hintText: 'Years',
+                        prefixIcon: Icon(Icons.cake),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Age is required';
+                        }
+                        final age = int.tryParse(value.trim());
+                        if (age == null || age < 1 || age > 120) {
+                          return 'Enter a valid age (1-120)';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _weightController,
+                      decoration: const InputDecoration(
+                        labelText: 'Weight',
+                        hintText: 'kg',
+                        prefixIcon: Icon(Icons.fitness_center),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Weight is required';
+                        }
+                        final weight = double.tryParse(value.trim());
+                        if (weight == null || weight < 1 || weight > 500) {
+                          return 'Enter a valid weight (1-500 kg)';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -294,69 +296,72 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget _buildGoalsPage() {
     return Padding(
       padding: const EdgeInsets.all(32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Set your daily goal',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Set your daily goal',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'Based on your weight, we recommend a daily water intake',
-            style: TextStyle(
-              fontSize: 16,
-              color: AppColors.textSecondary,
+            const SizedBox(height: 8),
+            const Text(
+              'Based on your weight, we recommend a daily water intake',
+              style: TextStyle(
+                fontSize: 16,
+                color: AppColors.textSecondary,
+              ),
             ),
-          ),
-          const SizedBox(height: 32),          TextFormField(
-            controller: _goalController,
-            decoration: const InputDecoration(
-              labelText: 'Daily Water Goal',
-              hintText: 'ml',
-              prefixIcon: Icon(Icons.local_drink),
-              suffixText: 'ml',
+            const SizedBox(height: 32),
+            TextFormField(
+              controller: _goalController,
+              decoration: const InputDecoration(
+                labelText: 'Daily Water Goal',
+                hintText: 'ml',
+                prefixIcon: Icon(Icons.local_drink),
+                suffixText: 'ml',
+              ),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Daily goal is required';
+                }
+                final goal = int.tryParse(value.trim());
+                if (goal == null || goal < 500 || goal > 5000) {
+                  return 'Enter a valid goal (500-5000 ml)';
+                }
+                return null;
+              },
             ),
-            keyboardType: TextInputType.number,
-            validator: (value) {
-              if (value == null || value.trim().isEmpty) {
-                return 'Daily goal is required';
-              }
-              final goal = int.tryParse(value.trim());
-              if (goal == null || goal < 500 || goal > 5000) {
-                return 'Enter a valid goal (500-5000 ml)';
-              }
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.waterBlueLight.withOpacity(0.1),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: AppColors.waterBlueLight),
-            ),
-            child: const Row(
-              children: [
-                Icon(Icons.info, color: AppColors.waterBlue),
-                SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    'Recommended intake: 35ml per kg of body weight',
-                    style: TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 14,
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: AppColors.waterBlueLight.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.waterBlueLight),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.info, color: AppColors.waterBlue),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Recommended intake: 35ml per kg of body weight',
+                      style: TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -364,9 +369,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget _buildNotificationsPage() {
     return Padding(
       padding: const EdgeInsets.all(32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
           const Text(
             'Stay reminded',
             style: TextStyle(
@@ -420,7 +426,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               onTap: () => _selectTime(context, false),
             ),
           ],
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -435,7 +442,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             width: 120,
             height: 120,
             decoration: BoxDecoration(
-              color: AppColors.success.withOpacity(0.1),
+              color: AppColors.success.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(60),
             ),
             child: const Icon(
