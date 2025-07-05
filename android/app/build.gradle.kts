@@ -10,7 +10,7 @@ plugins {
 android {
     namespace = "com.hydrify.app.hydrify_new"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "27.0.12077973"  // Updated for Firebase compatibility
+    ndkVersion = "26.3.11579264"  // Using working NDK version
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
